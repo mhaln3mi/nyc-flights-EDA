@@ -1,5 +1,5 @@
 # Install the package
-install.packages("nycflights13")
+# install.packages("nycflights13")
 
 # Initialize the libraries
 library(nycflights13)
@@ -34,10 +34,8 @@ dep_delay_cat <- cut(flights_df$dep_delay,
                                 "Medium Delay (31-120 min)",
                                 "High Delay (more than 121 min)"))
 
- ggplot(flights_df, aes(dep_delay_cat)) +
-  geom_bar() +
-  geom_text(aes(label= scales::percent(after_stat(as.double(prop))), group=1),
-    stat='count', vjust = -0.3, 
-  ) 
+ggplot(flights_df, aes(dep_delay)) +
+  geom_point() 
+ 
 
 #SHAIMAA
