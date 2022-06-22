@@ -58,12 +58,15 @@ flights_df %>%
 flights_df %>%
   filter(dep_delay > 0) %>%
   count(month, dep_delay, flight) %>% 
-  ggplot(aes(month, n, fill = )) +
+  ggplot(aes(month, n)) +
   geom_col() +
   labs(x = "Month",
        y = "Number of Departure delay",
        title = "Number of Departure delay by month") +
   xlim(0,12.5)
+
+# we can see from the plot that the highest number of departure delays occur on month 6 (Jun), 7 (Jul), and 12 (Dec)
+# which means there are more delays during summer and winter break.
 
 
 flights_df %>%
@@ -75,6 +78,9 @@ flights_df %>%
     y = "Number of Arrival delay",
     title = "Number of Arrival delay by month") +
   xlim(0,12.5)
+
+# similar to the previous plot, here we see highest number of arrival delays occur on month 7 (Jul), and 12 (Dec)
+# during the summer and winter breaks
 
 
 # facet
@@ -100,14 +106,6 @@ flights_df %>%
 
 
 
-flights_df %>%
-  count(month, dep_delay, flight) %>% 
-  ggplot(aes(as.factor(month), fill = (arr_delay > 0))) +
-  geom_bar(position = "stack") +
-  labs(x = "Month",
-       y = "Number of Flights",
-       title = "Number of flights by month") +
-  guides(fill = guide_legend("Arrival Delay"))
 
 #SAAD
 
