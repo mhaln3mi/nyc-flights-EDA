@@ -12,17 +12,17 @@ In this report, our goal is to alanyze the dataset to find relationships between
 <br>
 
 ## Methods used
--Data munging
--Exploratory data analysis(EDA)
--Data visualization
+- Data munging
+- Exploratory data analysis(EDA)
+- Data visualization
 <br>
 
 ## Libraries used
--here
--tidyverse
--knitr
--nycflights13
--plotly
--ggplot2
--janitor
+- here
+- tidyverse
+- knitr
+- nycflights13
+- plotly
+- ggplot2
+- janitor
 
