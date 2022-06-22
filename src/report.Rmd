@@ -71,7 +71,7 @@ The aim behind this analysis is to confirm whether there is a relationship betwe
 #### The Dataset
 
 ```{r}
-flights_data <- read.csv(here("data/flights_data_v2.csv"))
+flights_data <- read.csv(here("data/flights_data.csv"))
 
 kable(flights_data)
 ```
@@ -208,17 +208,19 @@ flights %>%
 
 posn_d <- position_dodge(width = 0.3)
 
-# ggplot(head(plot4, 200), aes(x=origin, y=value, color=name)) +
+# ggplot(head(plot4, 200), aes(x=origin, y=value, color=name)) + # for shoter interpretation time
 ggplot(plot4, aes(x=origin, y=value, color=name)) +
   geom_point(position = posn_d) +
-    stat_summary(fun = mean, na.rm = TRUE, 
+  stat_summary(fun = mean, na.rm = TRUE, 
                geom = "point", color = "black", size = 2) +
   labs(x="Airport", y="Delay (minutes)", color = "Delay type") +
   scale_color_brewer(palette = "Accent",
-                     labels = c("Arrival delay", "Departure delay"))
+                     labels = c("Arrival delay", "Departure delay")) +
+  stat_summary(fun=mean, colour="black", geom="text", show.legend = FALSE, 
+                 vjust=-0.7, aes( label=round(..y.., digits=1)))
 ```
 <p id="caption">Figure 4: Number of delays per NYC airport</p>
-The figure features positive and negative points–indicating departure/arrival was before time or ahead of scheduled time. Yet it is not enough to say that a one airport will have a certain delay time.
+The figure features positive and negative points–indicating departure/arrival was before time or ahead of scheduled time. The delay average across all airports is +9.7 minutes. Although each airport shows a different average, it is not enough to say that one airport will have a certain delay time.
 
 To further investigate that, let us take a look at the attributes and how they affect each other.
 
@@ -431,10 +433,14 @@ The carrier with the highest delay time is HA with 1301 min delay and the carrie
 <br>
 
 ### Conclusion
+After conducting the EDA, we have found out that delays on average do not exceed 15 minutes. The source of the delays vary and is related to multiple factors, notably: date and time of the flight and the flight carrier.
 
+<br>
 
 ### Resources
+Wickham H (2022). nycflights13: Flights that Departed NYC in 2013. R package version 1.0.2, [https://github.com/hadley/nycflights13](https://github.com/hadley/nycflights13).
 
+<br>
 
 ### Source Code
 This report is hosted on Github Pages and the repo can be accessed via [this link](https://github.com/mhaln3mi/nyc-flights-EDA).
