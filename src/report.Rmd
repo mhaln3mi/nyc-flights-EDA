@@ -1,114 +1,65 @@
 ---
-title: "NYC Flights EDA"
-date: '2022-06-22'
-knit: (function(input, ...) {
-    rmarkdown::render(
-      input,
-      output_dir = "../"
-    )
-  })
+title: "NYC Flights Delays"
+author: "Turki Alsaedi, Saad AlOtaibi, Yousef Alotaibi, Maan Al Neami, Shaimaa Alghamdi<br><br> Table of Contents"
+output:
+  html_document:
+    df_print: paged
+    toc: true
+editor_options:
+  chunk_output_type: inline
 ---
+```{=html}
+<style>
+#caption{
+    color: #777777;
+}
+body {
+text-align: justify;
+max-width: 800px;
+margin: auto;
+font-size: 16px;
+}
+</style>
+```
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
-
-# Libraries
-library(nycflights13)
+knitr::opts_chunk$set(echo = FALSE)
+library(here)        # relative paths in rmd
 library(tidyverse)
-library(janitor)
-
-# reading the dataset
-flights -> flights_df
-
+library(knitr)
+library(nycflights13)
+library(ggplot2)
 ```
 
-## Atrributes description 
-+--------------------+---------------+----------------------------------------------+
-|Variable            |Type           |    Description                               |
-+====================+===============+==============================================+
-| fixed_acidity      |    Double     | most acids involved with wine or fixed or    |
-|                    |               | nonvolatile (do not evaporate readily)       |
-+--------------------+---------------+----------------------------------------------+
-|Voltaile_acidity    |    Double     | the amount of acetic acid in wine, which at too high of levels can lead to an unpleasant, vinegar taste|
-|                    |               |                                              |
-+--------------------+---------------+----------------------------------------------+
-| citric_acid        |    Double     | found in small quantities, citric acid can add 'freshness' and flavor to wines|
-|                    |               |                                              |
-+--------------------+---------------+----------------------------------------------+
-|residual_sugar      |    Double     | the amount of sugar remaining after fermentation stops|
-|                    |               |                                              |
-+--------------------+---------------+----------------------------------------------+
-|chlorides           |    Double     | the amount of salt in the wine               |
-+--------------------+---------------+----------------------------------------------+
-|free_sulfur_dioxide |    Double     | the free form of SO2 exists in equilibrium between molecular SO2| 
-|                    |               | (as a dissolved gas) and bisulfite ion; it prevents microbial growth and the oxidation of wine|
-|                    |               |                                              |
-+--------------------+---------------+----------------------------------------------+
-|total_sulfur_dioxide|    Double     | amount of free and bound forms of S02; in low concentrations, SO2 is mostly undetectable in wine, but at free SO2 concentrations over 50 ppm,| 
-|                    |               | SO2 becomes evident in the nose and taste of wine|
-|                    |               |                                              |
-+--------------------+---------------+----------------------------------------------+
-|density             |    Double     | the density of water is close to that of water depending on the percent alcohol and sugar content|
-|                    |               |                                              |
-+--------------------+---------------+----------------------------------------------+
-|pH                  |    Double     | describes how acidic or basic a wine is on a scale from 0 (very acidic) to 14 (very basic); most wines are between 3-4 on the pH scale|
-|                    |               |                                              |
-+--------------------+---------------+----------------------------------------------+
-|sulphates           |    Double     | a wine additive which can contribute to sulfur dioxide gas (S02) levels, wich acts as an antimicrobial and antioxidant|
-|                    |               |                                              |
-+--------------------+---------------+----------------------------------------------+
-|alcohol             |    Double     | the percent alcohol content of the wine      |
-+--------------------+---------------+----------------------------------------------+
-|quality             |    Double     | Score between (3-8)                          | 
-+--------------------+---------------+----------------------------------------------+
+### Introduction
+Airport delays are one of the most common problems people face upon travelling. These delays are usually associated with certain carriers or destinations. Thus the question is, are they really the cause of these delays or is it due to other reasons?
 
+In 2013, data about 336,776 flights were collected to answer this question, the data collected were about flights departing from New York City across all of its airports: John F. Kennedy International Airport (JFK), Newark Liberty International Airport (EWR) and LaGuardia Airport (LGA) to destinations all over the United States and some of its territories (Puerto Rico, and the American Virgin Islands). The data was described by 19 attributes shown in Table 1.
 
-```{r, echo=FALSE, include=FALSE}
+#### Goal
 
-glimpse(flights_df)
-summary(flights_df)
+#### Methods
 
-# Checking for duplicates.
-get_dupes(flights_df)
-
-# Checking for null values.
-flights_df <- flights_df %>% drop_na()
-colSums(is.na(flights_df))
-
-```
-
-
-
-```{r} 
-# yousef
-
- 
-```
-
-
+### EDA
+#### The Dataset
 
 ```{r}
-# saad 
+flights_data <- read.csv(here("data/flights_data_v2.csv"))
+
+kable(flights_data)
+```
+<p id="caption">Table 1: A list of all attributes and its descriptions that are present in the dataset</p>
+
+<br>
+Although 3 airports per city may seem large, larger than many of the world’s capitals, the city that never sleeps hosts only 3 out of 16 airports of the state of New York which itself is not the host of the largest number of airports per state as shown in Figure 1.
+
+```{r}
 
 ```
 
 
-``` {r}
-# turki
-```
+When you save the notebook, an HTML file containing the code and output will be saved alongside it (click the *Preview* button or press *Ctrl+Shift+K* to preview the HTML file).
 
-
-
-``` {r}
-# maan
-```
-
-
-## Conclusion 
-
-
-                  
-## Citation
-
-#### [name](url)
-
+### Conclusion
+### Resources
+### Source Code
