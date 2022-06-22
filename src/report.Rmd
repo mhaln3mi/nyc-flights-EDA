@@ -200,7 +200,26 @@ The map shows us that the most visited destination is Florida, followed by Calif
 
 ##### MAAN
 
-
+``` {r, figures-side, fig.show="hold", out.width="50%"}
+flights_df %>%
+  filter(dep_delay > 0) %>%
+  count(month, dep_delay) %>% 
+  ggplot(aes(month, n)) +
+  geom_col() +
+  labs(x = "Month",
+       y = "Number of Departure delays",
+       title = "Number of Departure delays by month") +
+  xlim(0,12.5)
+flights_df %>%
+  filter(arr_delay > 0) %>%
+  count(month, arr_delay) %>% 
+  ggplot(aes(month, n)) +
+  geom_col() +
+  labs(x = "Month",
+    y = "Number of Arrival delays",
+    title = "Number of Arrival delays by month") +
+  xlim(0,12.5)
+```
 
 <br>
 
