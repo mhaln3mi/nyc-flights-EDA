@@ -1,5 +1,5 @@
 # Install the package
-# install.packages("nycflights13")
+install.packages("nycflights13")
 
 # Initialize the libraries
 library(nycflights13)
@@ -24,7 +24,7 @@ colSums(is.na(flights_df))
 
 #SAAD
 
-#YOUSEF
+#YOSUF
 
 library("gridExtra")  
 
