@@ -308,12 +308,11 @@ ggplot(flights_df1, aes(arr_delay_cat)) +
 
 ``` 
 
-#### We can see that almost 39% of the NYC flights in the year 2013 had a departure delay, only 5% departed on time and 55.9% departed before time.
-#### as for the arrival delays, we can see that it doesn't differ that much from the departure delays.
+We can see that almost 39% of the NYC flights in the year 2013 had a departure delay, only 5% departed on time and 55.9% departed before time. As for the arrival delays, we can see that it doesn't differ that much from the departure delays.
 
 <br><br>
 
-```{r, echo=FALSE} 
+```{r} 
 
 # Summarizing each carrier with no_flights and percentage of dep_delays.
 
@@ -324,12 +323,14 @@ flights_df1 %>%
             medium_delay = scales::percent(sum(dep_delay > 16 & dep_delay < 61)/no_flights),
             high_delay = scales::percent(sum(dep_delay > 60)/no_flights),
             overall_delay = scales::percent(sum(dep_delay > 0)/no_flights)) %>%
-  arrange(-no_flights)
+  arrange(-no_flights) %>% 
+  kable()
 ```
-#### WN carriers tend to have the highest percentage of overall delays, and US carriers tend to have a low percentage of delays compared to its number of flights.
+
+WN carriers tend to have the highest percentage of overall delays, and US carriers tend to have a low percentage of delays compared to its number of flights.
 
 <br><br>
-```{r, echo=FALSE}
+```{r}
 
 # Plotting each carrier based on dep_delay_cat
 
@@ -339,20 +340,23 @@ flights_pos_delay <- flights_df1 %>%
 ggplot(flights_pos_delay, aes(y = carrier, fill = dep_delay_cat)) +
   geom_bar()
 ```
-#### From the horizontal stacked bar it's clear that carriers UA, EV, B6 and DL have the highest frequency of delays, also these carriers have the highest number of flights, which can tell us that carriers having a high amount of flights tend to have a high frequency of delays.
+
+From the horizontal stacked bar it's clear that carriers UA, EV, B6 and DL have the highest frequency of delays, also these carriers have the highest number of flights, which can tell us that carriers having a high amount of flights tend to have a high frequency of delays.
 
 <br><br>
-```{r, echo=FALSE}
+```{r}
 
 # Summarizing each carrier with highest_delay and avg_delay
 
 flights_df1 %>%
   group_by(carrier) %>%
   summarise(highest_delay = max(dep_delay), avg_delay = mean(dep_delay)) %>%
-  arrange(-avg_delay)
+  arrange(-avg_delay) %>% 
+  kable()
  
 ```
-#### The carrier with the highest delay time is HA with 1301 min delay and the carrier with the highest avg delay is F9 with an average of 20.2 
+
+The carrier with the highest delay time is HA with 1301 min delay and the carrier with the highest avg delay is F9 with an average of 20.2 
 
 ##### SHAIMAA
 
