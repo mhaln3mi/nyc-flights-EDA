@@ -57,9 +57,9 @@ In 2013, data about 336,776 flights were collected to answer this question, the 
 In this report, our goal is to alanyze the dataset to find relationships between delays and our variables.
 <br>
 #### Methods
--Data munging
--Exploratory data analysis(EDA)
--Data visualization
+- Data munging
+- Exploratory data analysis(EDA)
+- Data visualization
 <br>
 ### EDA
 #### The Dataset
