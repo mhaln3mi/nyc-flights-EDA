@@ -206,11 +206,7 @@ fig %>%
 <p id="caption">Figure 3: Map showing flights per state as destination</p>
 
 The map shows us that the most visited destination is Florida, followed by California by almost half of the number. The map also shows that there are 8 states with zero flights towards it namely: Mississippi, Kansas, Idaho, New Hampshire, New Jersey, Delaware, South and North Dakota.
-
-
-### Conclusion
-### Resources
-### Source Code
+<br><br>
 
 
 ##### MAAN
@@ -402,4 +398,10 @@ flights_df1 %>%
 ```
 
 The carrier with the highest delay time is HA with 1301 min delay and the carrier with the highest avg delay is F9 with an average of 20.2 
+
+<br><br>
+
+### Conclusion
+### Resources
+### Source Code
 
