@@ -1,20 +1,177 @@
 ---
-title: "R Notebook"
-output: html_notebook
-editor_options: 
-  chunk_output_type: inline
+title: "NYC Flights EDA"
+date: '2022-06-22'
+knit: (function(input, ...) {
+    rmarkdown::render(
+      input,
+      output_dir = "../"
+    )
+  })
 ---
 
-This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook. When you execute code within the notebook, the results appear beneath the code. 
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
 
-Try executing this chunk by clicking the *Run* button within the chunk or by placing your cursor inside it and pressing *Ctrl+Shift+Enter*. 
+# Libraries
+library(nycflights13)
+library(tidyverse)
+library(janitor)
 
-```{r}
-plot(cars)
+# reading the dataset
+flights -> flights_df
+
 ```
 
-Add a new chunk by clicking the *Insert Chunk* button on the toolbar or by pressing *Ctrl+Alt+I*.
+## Atrributes description 
++--------------------+---------------+----------------------------------------------+
+|Variable            |Type           |    Description                               |
++====================+===============+==============================================+
+| fixed_acidity      |    Double     | most acids involved with wine or fixed or    |
+|                    |               | nonvolatile (do not evaporate readily)       |
++--------------------+---------------+----------------------------------------------+
+|Voltaile_acidity    |    Double     | the amount of acetic acid in wine, which at too high of levels can lead to an unpleasant, vinegar taste|
+|                    |               |                                              |
++--------------------+---------------+----------------------------------------------+
+| citric_acid        |    Double     | found in small quantities, citric acid can add 'freshness' and flavor to wines|
+|                    |               |                                              |
++--------------------+---------------+----------------------------------------------+
+|residual_sugar      |    Double     | the amount of sugar remaining after fermentation stops|
+|                    |               |                                              |
++--------------------+---------------+----------------------------------------------+
+|chlorides           |    Double     | the amount of salt in the wine               |
++--------------------+---------------+----------------------------------------------+
+|free_sulfur_dioxide |    Double     | the free form of SO2 exists in equilibrium between molecular SO2| 
+|                    |               | (as a dissolved gas) and bisulfite ion; it prevents microbial growth and the oxidation of wine|
+|                    |               |                                              |
++--------------------+---------------+----------------------------------------------+
+|total_sulfur_dioxide|    Double     | amount of free and bound forms of S02; in low concentrations, SO2 is mostly undetectable in wine, but at free SO2 concentrations over 50 ppm,| 
+|                    |               | SO2 becomes evident in the nose and taste of wine|
+|                    |               |                                              |
++--------------------+---------------+----------------------------------------------+
+|density             |    Double     | the density of water is close to that of water depending on the percent alcohol and sugar content|
+|                    |               |                                              |
++--------------------+---------------+----------------------------------------------+
+|pH                  |    Double     | describes how acidic or basic a wine is on a scale from 0 (very acidic) to 14 (very basic); most wines are between 3-4 on the pH scale|
+|                    |               |                                              |
++--------------------+---------------+----------------------------------------------+
+|sulphates           |    Double     | a wine additive which can contribute to sulfur dioxide gas (S02) levels, wich acts as an antimicrobial and antioxidant|
+|                    |               |                                              |
++--------------------+---------------+----------------------------------------------+
+|alcohol             |    Double     | the percent alcohol content of the wine      |
++--------------------+---------------+----------------------------------------------+
+|quality             |    Double     | Score between (3-8)                          | 
++--------------------+---------------+----------------------------------------------+
 
-When you save the notebook, an HTML file containing the code and output will be saved alongside it (click the *Preview* button or press *Ctrl+Shift+K* to preview the HTML file).
 
-The preview shows you a rendered HTML copy of the contents of the editor. Consequently, unlike *Knit*, *Preview* does not run any R code chunks. Instead, the output of the chunk when it was last run in the editor is displayed.
+```{r, echo=FALSE, include=FALSE}
+
+glimpse(flights_df)
+summary(flights_df)
+
+# Checking for duplicates.
+get_dupes(flights_df)
+
+# Checking for null values.
+flights_df <- flights_df %>% drop_na()
+colSums(is.na(flights_df))
+
+```
+
+
+
+```{r, figures-side, fig.show="hold", out.width="50%"} 
+# yousef
+library("gridExtra")  
+
+flights_df1 <- flights_df
+
+flights_df1$dep_delay_cat <- cut(flights_df1$dep_delay,
+                     breaks = c(-45,-1,0,15,60,1301),
+                     labels = c("Before Time",
+                                "On Time",
+                                "Low Delay (less than 15 min)",
+                                "Medium Delay (16-60 min)",
+                                "High Delay (more than 60 min)"))
+
+flights_df1$arr_delay_cat <- cut(flights_df1$arr_delay,
+                     breaks = c(-88,-1,0,15,60,1272),
+                     labels = c("Before Time",
+                                "On Time",
+                                "Low Delay (less than 15 min)",
+                                "Medium Delay (16-60 min)",
+                                "High Delay (more than 61 min)"))
+
+ggplot(flights_df1, aes(dep_delay_cat)) +
+  geom_bar() +
+  geom_text(aes(label= scales::percent(after_stat(as.double(prop))), group=1),
+            stat='count', vjust = -0.3,) +
+  scale_x_discrete(guide = guide_axis(n.dodge=2))+
+  labs(title="Percentage of NYC Flights Departure Delay (2013)",
+       x = "Departue Delay Time",
+       y = "Number of Departure Delays")
+
+
+ggplot(flights_df1, aes(arr_delay_cat)) +
+  geom_bar() +
+  geom_text(aes(label= scales::percent(after_stat(as.double(prop))), group=1),
+            stat='count', vjust = -0.3, ) +
+  scale_x_discrete(guide = guide_axis(n.dodge=2)) +
+  labs(title="Percentage of NYC Flights Arrival Delay (2013)",
+       x = "Arrival Delay Time",
+       y = "Number of Arrival Delays")
+
+## grid.arrange(dep_plot, arr_plot, ncol = 2)
+
+``` 
+
+```{r, echo=FALSE} 
+flights_df1 %>% 
+  group_by(carrier) %>%
+  summarise(no_flights = n()) %>%
+  arrange(-no_flights)
+
+flights_pos_delay <- flights_df1 %>%
+  filter(dep_delay > -1)
+
+ggplot(flights_pos_delay, aes(y = carrier, fill = dep_delay_cat)) +
+  geom_bar()
+
+# We can see that top 4 carriers having a high frequency of delay are 
+# UA, EV, B6 and DL. These carriers also have the highest frequency of 
+# dep_delay more than 60 min.
+
+flights_df1 %>%
+  group_by(carrier) %>%
+  summarise(highest_delay = max(dep_delay), avg_delay = mean(dep_delay),
+            delays_higher_than_120min = sum(dep_delay > 120)) %>%
+  arrange(-avg_delay)
+ 
+```
+
+
+
+```{r}
+# saad 
+
+```
+
+
+``` {r}
+# turki
+```
+
+
+
+``` {r}
+# maan
+```
+
+
+## Conclusion 
+
+
+                  
+## Citation
+
+#### [name](url)
+
