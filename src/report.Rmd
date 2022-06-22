@@ -79,9 +79,6 @@ library(reactable)
 reactable(sample_n(flights, 5))
 ```
 <p id="caption">Table 2: A sample of the dataset and how it is structured</p>
-<br>
-Although 3 airports per city may seem large, larger than many of the world’s capitals, the city that never sleeps hosts only 3 out of 16 airports of the state of New York which itself is not the host of the largest number of airports per state as shown in Figure 1.
-
 <br><br>
 
 #### Shaimaa
@@ -109,7 +106,12 @@ glimpse(flights_df)
 summary(flights_df)
 
 ```
-<br>
+<br><br>
+
+Although 3 airports per city may seem large, larger than many of the world’s capitals, the city that never sleeps hosts only 3 out of 16 airports of the state of New York which itself is not the host of the largest number of airports per state as shown in Figure 1.
+
+<br><br>
+
 
 
 ### EDA
@@ -261,7 +263,8 @@ Here we see the correlation matrix between the main numeric attributes.
 ### Conclusion
 ### Resources
 ### Source Code
-
+=======
+<br><br>
 
 ##### MAAN
 
@@ -431,4 +434,10 @@ flights_df1 %>%
 ```
 
 The carrier with the highest delay time is HA with 1301 min delay and the carrier with the highest avg delay is F9 with an average of 20.2 
+
+<br><br>
+
+### Conclusion
+### Resources
+### Source Code
 
