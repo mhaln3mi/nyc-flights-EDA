@@ -41,6 +41,11 @@ dep_matrix
 arr_matrix <- cor(arr_df, use = "complete.obs")
 arr_matrix
 
+library(corrplot)
+corrplot(dep_matrix, type = "upper", order = "hclust", 
+         tl.col = "black", tl.srt = 45)
+
+
 #YOSUF
 
 #SHAIMAA
