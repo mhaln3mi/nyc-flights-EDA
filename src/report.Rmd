@@ -384,7 +384,7 @@ ggplot(flights_pos_delay, aes(y = carrier, fill = dep_delay_cat)) +
   geom_bar()
 ```
 
-From the horizontal stacked bar it's clear that carriers UA, EV, B6 and DL have the highest frequency of delays, also these carriers have the highest number of flights, which can tell us that carriers having a high amount of flights tend to have a high frequency of delays.
+From the horizontal stacked bar it's clear that carriers UA, EV, B6 and DL have the highest frequency of delays, also these carriers have the highest number of flights, which can tell us that carriers having a high number of flights tend to have a high frequency of delays.
 
 <br><br>
 ```{r}
