@@ -177,28 +177,7 @@ The map shows us that the most visited destination is Florida, followed by Calif
 
 ##### MAAN
 
-``` {r, figures-side, fig.show="hold", out.width="50%"}
 
-flights_df %>%
-  filter(dep_delay > 0) %>%
-  count(month, dep_delay) %>% 
-  ggplot(aes(month, n)) +
-  geom_col() +
-  labs(x = "Month",
-       y = "Number of Departure delays",
-       title = "Number of Departure delays by month") +
-  xlim(0,12.5)
-
-flights_df %>%
-  filter(arr_delay > 0) %>%
-  count(month, arr_delay) %>% 
-  ggplot(aes(month, n)) +
-  geom_col() +
-  labs(x = "Month",
-    y = "Number of Arrival delays",
-    title = "Number of Arrival delays by month") +
-  xlim(0,12.5)
-```
 
 <br>
 
@@ -211,9 +190,9 @@ similar to the previous plot, in the second plot on the right, we see highest nu
 
 
 
-```{r figures-side, fig.show="hold", out.width="50%"}
-flights_df %>%
-  count(month, dep_delay, flight) %>% 
+```{r}
+flights %>%
+  count(month, dep_delay, flight) %>%
   ggplot(aes(as.factor(month), fill = (dep_delay > 0))) +
   geom_bar(position = "stack") +
   labs(x = "Month",
@@ -221,8 +200,8 @@ flights_df %>%
        title = "Number of flights by month") +
   guides(fill = guide_legend("Departure Delay"))
 
-flights_df %>%
-  count(month, arr_delay, flight) %>% 
+flights %>%
+  count(month, arr_delay, flight) %>%
   ggplot(aes(as.factor(month), fill = (arr_delay > 0))) +
   geom_bar(position = "stack") +
   labs(x = "Month",
@@ -242,7 +221,7 @@ The second plot is similar to the first where the number of flights increases, t
 <br>
 
 ```{r}
-all_df <- subset(flights, 
+all_df <- subset(flights,
                  select = c(dep_time, sched_dep_time, dep_delay,
                             arr_time, sched_arr_time, arr_delay,
                             air_time, distance) )
@@ -250,7 +229,7 @@ all_df <- subset(flights,
 all_matrix <- cor(all_df, use = "complete.obs")
 
 library(corrplot)
-corrplot(all_matrix, type = "upper", order = "hclust", 
+corrplot(all_matrix, type = "upper", order = "hclust",
          tl.col = "black", tl.srt = 45, diag = FALSE, method = "number")
 ```
 
@@ -278,7 +257,7 @@ colSums(is.na(flights_df))
 
 ```
 
-```{r, figures-side, fig.show="hold", out.width="50%"} 
+```{r} 
 # library("gridExtra")  
 
 flights_df1 <- flights_df
