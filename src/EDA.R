@@ -1,4 +1,3 @@
-
 # Install the package
 install.packages("nycflights13")
 
@@ -6,7 +5,6 @@ install.packages("nycflights13")
 library(nycflights13)
 library(tidyverse)
 library(janitor)
-
 
 flights -> flights_df
 
@@ -17,14 +15,84 @@ summary(flights_df)
 get_dupes(flights_df)
 
 # Checking for null values.
-is.null(flights_df)
+flights_df <- flights_df %>% drop_na()
+colSums(is.na(flights_df))
 
 #TURKI
-
-#MAAN
-
 library(ggplot2)
-library(gridExtra)
+
+# PLOT 1
+# distribution of flights per month
+flights %>% 
+  group_by(month) %>% 
+  summarise(n = n())
+
+ggplot(flights, aes(x = as.factor(month))) +
+  geom_bar(stat = "count")
+
+# we can see that all month are similar with 
+# min = 24951 (feb) and max = 29425 (jul)
+
+
+# PLOT 2
+# origin vs no of flights
+flights %>% 
+  group_by(origin) %>% 
+  summarise(count_flights = n()) %>% # % of flights
+  ggplot(aes(x= origin, y = count_flights)) +
+  geom_col()
+
+
+# # PLOT 3
+# # origin vs dep_delay
+# flights %>% 
+#   group_by(origin) %>% 
+#   summarise(dep_delay = sum(dep_delay) / n()) %>% # % of flights
+#   ggplot(aes(x= origin, y= dep_delay)) +
+#   geom_col()
+# 
+# # PLOT 4
+# # origin vs arr_delay
+# flights %>% 
+#   group_by(origin) %>% 
+#   summarise(arr_delay = sum(arr_delay) / n()) %>% # % of flights
+#   ggplot(aes(x= origin, y= arr_delay)) +
+#   geom_col()
+
+# PLOT 5
+# origin vs arr_delay / dep_delay
+flights %>% 
+  drop_na() -> flights
+
+flights %>% 
+  select(origin, is.na(arr_delay), is.na(dep_delay)) %>% 
+  pivot_longer(-c(origin)) -> plot5
+
+plot5 %>% 
+  group_by(origin, name) %>% 
+  summarise(sum(value))
+
+ggplot(plot5, aes(origin, value, fill = name)) +
+  geom_bar(stat='identity', position = "dodge")
+## use filter? 
+
+# PLOT 6
+# dest vs arr_delay / dep_delay
+flights %>% 
+  drop_na() -> flights
+
+flights %>% 
+  select(dest, dep_delay) %>% 
+  pivot_longer(-c(dest)) -> plot6
+
+plot6 %>% 
+  group_by(dest, name) %>% 
+  summarise(sum(value))
+
+ggplot(plot6, aes(dest, value, fill = name)) +
+  geom_bar(stat='identity', position = "dodge")
+#MAAN
+library(ggplot2)
 
 # dep_delay by day-time (hours)
 flights_df <- flights_df %>% 
@@ -76,15 +144,15 @@ flights_df %>%
   ggplot(aes(month, n)) +
   geom_col() +
   labs(x = "Month",
-    y = "Number of Arrival delay",
-    title = "Number of Arrival delay by month") +
+       y = "Number of Arrival delay",
+       title = "Number of Arrival delay by month") +
   xlim(0,12.5)
 
 # similar to the previous plot, here we see highest number of arrival delays occur on month 7 (Jul), and 12 (Dec)
 # during the summer and winter breaks
 
 
-# facet
+# total flights stack
 
 flights_df %>%
   count(month, dep_delay, flight) %>% 
@@ -105,11 +173,9 @@ flights_df %>%
        title = "Number of flights by month") +
   guides(fill = guide_legend("Arrival Delay"))
 
-
-
-
 #SAAD
 
 #YOSUF
 
 #SHAIMAA
+
