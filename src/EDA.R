@@ -82,9 +82,6 @@ flights_pos_delay <- flights_df1 %>%
 ggplot(flights_pos_delay, aes(y = carrier, fill = dep_delay_cat)) +
   geom_bar()
 
-# We can see that top 4 carriers having a high frequency of delay are 
-# UA, EV, B6 and DL. These carriers also have the highest frequency of 
-# dep_delay more than 60 min.
 
 flights_df1 %>%
   group_by(carrier) %>%
@@ -93,7 +90,3 @@ flights_df1 %>%
 
 #SHAIMAA
 
-flights_df %>%
-  filter(hour == 15) %>% 
-  filter(dep_delay > 0) %>%
-  nrow()
