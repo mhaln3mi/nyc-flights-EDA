@@ -83,6 +83,25 @@ Although 3 airports per city may seem large, larger than many of the world’s c
 
 <br><br>
 
+####shaimaa
+
+first we need to clean our data 
+
+```{r, echo=FALSE, include=FALSE}
+flights -> flights_df
+glimpse(flights_df)
+summary(flights_df)
+
+# Checking for duplicates.
+janitor::get_dupes(flights_df)
+
+# Checking for null values.
+flights_df <- flights_df %>% drop_na()
+colSums(is.na(flights_df))
+
+```
+<br>
+
 ```{r}
 airports_per_state <- read_csv(here("data/airports_per_state.csv"))
 
@@ -249,19 +268,6 @@ Here we see the correlation matrix between the main numeric attributes.
 - there is some obvious *strong* correlations like between the distance and the air time and the bottom part between the attributes departure time, scheduled departure time, arrival time, scheduled arrival time.
 
 ##### YOSUF
-```{r, echo=FALSE, include=FALSE}
-flights -> flights_df
-glimpse(flights_df)
-summary(flights_df)
-
-# Checking for duplicates.
-janitor::get_dupes(flights_df)
-
-# Checking for null values.
-flights_df <- flights_df %>% drop_na()
-colSums(is.na(flights_df))
-
-```
 
 ```{r, figures-side, fig.show="hold", out.width="50%"} 
 # library("gridExtra")  
