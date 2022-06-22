@@ -54,9 +54,13 @@ Airport delays are one of the most common problems people face upon travelling. 
 In 2013, data about 336,776 flights were collected to answer this question, the data collected were about flights departing from New York City across all of its airports: John F. Kennedy International Airport (JFK), Newark Liberty International Airport (EWR) and LaGuardia Airport (LGA) to destinations all over the United States and some of its territories (Puerto Rico, and the American Virgin Islands). The data was described by 19 attributes shown in Table 1 followed by a sample of the data in Table 2.
 
 #### Goal
-
+In this report, our goal is to alanyze the dataset to find relationships between delays and our variables.
+<br>
 #### Methods
-
+-Data munging
+-Exploratory data analysis(EDA)
+-Data visualization
+<br>
 ### EDA
 #### The Dataset
 
