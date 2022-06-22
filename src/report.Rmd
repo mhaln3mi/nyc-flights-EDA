@@ -23,11 +23,13 @@ font-size: 16px;
 ```
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = FALSE)
-library(here)        # relative paths in rmd
+knitr::opts_chunk$set(echo = FALSE,    # hide code blocks
+                      message = FALSE) # hide warning messages
+library(here)
 library(tidyverse)
 library(knitr)
 library(nycflights13)
+library(plotly)
 library(ggplot2)
 ```
 
@@ -53,13 +55,65 @@ kable(flights_data)
 <br>
 Although 3 airports per city may seem large, larger than many of the world’s capitals, the city that never sleeps hosts only 3 out of 16 airports of the state of New York which itself is not the host of the largest number of airports per state as shown in Figure 1.
 
+<br><br>
+
 ```{r}
+airports_per_state <- read_csv(here("data/airports_per_state.csv"))
 
+airports_per_state %>% 
+  group_by(state, state_abv) %>% 
+  summarise(airports_no = n()) -> airports_per_state
+
+# Plotting the map
+
+fig <- plot_geo(airports_per_state, locationmode = 'USA-states')
+
+# specifying scale and options
+g <- list(
+  scope = 'usa',
+  projection = list(type = 'albers usa'),
+  showlakes = TRUE,
+  lakecolor = toRGB('white')
+)
+
+fig %>%
+  add_trace(
+    z = ~airports_no, text = ~state, locations = ~state_abv,
+    color = ~airports_no, colors = 'Purples') %>% 
+  colorbar(title = "Airports") %>%
+  layout( title = 'No. of airports per State',
+          geo = g)
 ```
+<p id="caption">Figure 1: An interactive map showing the number of airports per state. Puerto Rico (7 airports) and U.S. Virgin Islands (2 airports) are not shown.</p>
 
+<br>
+Based on the figure we can observe that:
 
-When you save the notebook, an HTML file containing the code and output will be saved alongside it (click the *Preview* button or press *Ctrl+Shift+K* to preview the HTML file).
+- Alaska has 28 airports making it the state with the largest number of airports followed by Texas (24) and California (23).
+- Only one state (Vermont) has one airport.
+- Every state has at least one airport.
+
+The three airports of the city of New York serve different purposes–such as domestic or international–and hence should have different number of flights, let us confirm that using Figure 2.
+
+```{r}
+flights %>% 
+  group_by(origin) %>% 
+  summarise(count_flights = n()) %>% # % of flights
+  ggplot(aes(x= origin, y = count_flights)) +
+           geom_col()
+```
+<p id="caption">Figure 2: An interactive map showing the number of airports per state. Puerto Rico (7 airports) and U.S. Virgin Islands (2 airports) are not shown.</p>
+
 
 ### Conclusion
 ### Resources
 ### Source Code
+
+
+##### MAAN
+
+##### SAAD
+
+##### YOSUF
+
+##### SHAIMAA

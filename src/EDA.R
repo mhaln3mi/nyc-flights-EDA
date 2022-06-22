@@ -84,8 +84,23 @@ plot5 %>%
 
 ggplot(plot5, aes(origin, value, fill = name)) +
   geom_bar(stat='identity', position = "dodge")
+## use filter? 
 
+# PLOT 6
+# dest vs arr_delay / dep_delay
+flights %>% 
+  drop_na() -> flights
 
+flights %>% 
+  select(dest, dep_delay) %>% 
+  pivot_longer(-c(dest)) -> plot6
+
+plot6 %>% 
+  group_by(dest, name) %>% 
+  summarise(sum(value))
+
+ggplot(plot6, aes(dest, value, fill = name)) +
+  geom_bar(stat='identity', position = "dodge")
 #MAAN
 
 #SAAD
