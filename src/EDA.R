@@ -174,6 +174,26 @@ flights_df %>%
   guides(fill = guide_legend("Arrival Delay"))
 
 #SAAD
+# We'll use the correlation matrix
+all_df <- subset(flights_df, 
+                 select = c(dep_time, sched_dep_time, dep_delay,
+                            arr_time, sched_arr_time, arr_delay,
+                            air_time, distance) )
+
+all_matrix <- cor(all_df, use = "complete.obs")
+
+library(corrplot)
+corrplot(all_matrix, type = "upper", order = "hclust", 
+         tl.col = "black", tl.srt = 45, diag = FALSE, method = "number")
+
+flights_df %>%
+  slice_max(arr_delay) -> most_arr_delay
+
+flights_df %>%
+  slice_max(dep_delay) -> most_dep_delay
+
+glimpse(most_arr_delay)
+glimpse(most_dep_delay)
 
 #YOSUF
 
