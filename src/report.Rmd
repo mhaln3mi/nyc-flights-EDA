@@ -7,6 +7,13 @@ output:
     toc: true
 editor_options:
   chunk_output_type: inline
+  
+knit: (function(input, ...) {
+    rmarkdown::render(
+      input,
+      output_dir = "../"
+    )
+  })
 ---
 ```{=html}
 <style>
@@ -19,6 +26,14 @@ max-width: 800px;
 margin: auto;
 font-size: 16px;
 }
+
+table{
+  position:relative;
+  width: 160% !important;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
 </style>
 ```
 
@@ -36,7 +51,7 @@ library(ggplot2)
 ### Introduction
 Airport delays are one of the most common problems people face upon travelling. These delays are usually associated with certain carriers or destinations. Thus the question is, are they really the cause of these delays or is it due to other reasons?
 
-In 2013, data about 336,776 flights were collected to answer this question, the data collected were about flights departing from New York City across all of its airports: John F. Kennedy International Airport (JFK), Newark Liberty International Airport (EWR) and LaGuardia Airport (LGA) to destinations all over the United States and some of its territories (Puerto Rico, and the American Virgin Islands). The data was described by 19 attributes shown in Table 1.
+In 2013, data about 336,776 flights were collected to answer this question, the data collected were about flights departing from New York City across all of its airports: John F. Kennedy International Airport (JFK), Newark Liberty International Airport (EWR) and LaGuardia Airport (LGA) to destinations all over the United States and some of its territories (Puerto Rico, and the American Virgin Islands). The data was described by 19 attributes shown in Table 1 followed by a sample of the data in Table 2.
 
 #### Goal
 
@@ -52,6 +67,13 @@ kable(flights_data)
 ```
 <p id="caption">Table 1: A list of all attributes and its descriptions that are present in the dataset</p>
 
+<br>
+
+```{r}
+library(reactable)
+reactable(sample_n(flights, 5))
+```
+<p id="caption">Table 2: A sample of the dataset and how it is structured</p>
 <br>
 Although 3 airports per city may seem large, larger than many of the world’s capitals, the city that never sleeps hosts only 3 out of 16 airports of the state of New York which itself is not the host of the largest number of airports per state as shown in Figure 1.
 
@@ -79,20 +101,20 @@ g <- list(
 fig %>%
   add_trace(
     z = ~airports_no, text = ~state, locations = ~state_abv,
-    color = ~airports_no, colors = 'Purples') %>% 
+    color = ~airports_no, colors = 'Blues') %>% 
   colorbar(title = "Airports") %>%
   layout( title = 'No. of airports per State',
           geo = g)
 ```
 <p id="caption">Figure 1: An interactive map showing the number of airports per state. Puerto Rico (7 airports) and U.S. Virgin Islands (2 airports) are not shown.</p>
 
-<br>
 Based on the figure we can observe that:
 
 - Alaska has 28 airports making it the state with the largest number of airports followed by Texas (24) and California (23).
 - Only one state (Vermont) has one airport.
 - Every state has at least one airport.
 
+<br>
 The three airports of the city of New York serve different purposes–such as domestic or international–and hence should have different number of flights, let us confirm that using Figure 2.
 
 ```{r}
@@ -100,9 +122,51 @@ flights %>%
   group_by(origin) %>% 
   summarise(count_flights = n()) %>% # % of flights
   ggplot(aes(x= origin, y = count_flights)) +
-           geom_col()
+  geom_col(fill="light blue") +
+  labs(x = "NYC Airport", y = "No. of flights")
 ```
-<p id="caption">Figure 2: An interactive map showing the number of airports per state. Puerto Rico (7 airports) and U.S. Virgin Islands (2 airports) are not shown.</p>
+<p id="caption">Figure 2: Number of flights per NYC airport</p>
+
+From the figure above, we can see that all of the airports have relatively similar numbers with LaGuardia Airport (LGA) having the lowest, probably due the fact that it is a domestic airport. Newark Liberty International Airport (EWR) has the largest share of flights, which can be explained by looking at its location, where it lays on the border between New York state and New Jersey state, making it a strategic location and more favourable over JFK International Airport.
+
+<br>
+And despite the large number of flights and airports around the United States, Figure 3 showed that some states were never reached from NYC airports during 2013.
+
+<br>
+
+```{r}
+airports_per_state <- read_csv(here("data/airports_per_state.csv"))
+
+airports_per_state %>% 
+  rename(dest = airport_code)-> airports_per_state
+
+left_join(flights, airports_per_state, by='dest') -> flights
+
+flights %>%
+  group_by(state, state_abv) %>% 
+  summarise(flights_per_state = n()) -> flights_map_df
+
+fig <- plot_geo(flights_map_df, locationmode = 'USA-states')
+
+g <- list(
+  scope = 'usa',
+  projection = list(type = 'albers usa'),
+  showlakes = TRUE,
+  lakecolor = toRGB('white')
+)
+
+fig %>%
+  add_trace(
+    z = ~flights_per_state, text = ~state, locations = ~state_abv,
+    color = ~flights_per_state, colors = 'YlGnBu') %>% 
+  colorbar(title = "Flights per state") %>%
+  layout( title = 'No. of flights to destination by State',
+          geo = g)
+
+```
+<p id="caption">Figure 3: Map showing flights per state as destination</p>
+
+The map shows us that the most visited destination is Florida, followed by California by almost half of the number. The map also shows that there are 8 states with zero flights towards it namely: Mississippi, Kansas, Idaho, New Hampshire, New Jersey, Delaware, South and North Dakota.
 
 
 ### Conclusion
