@@ -1,0 +1,20 @@
+Attribute,Description
+year,Date of departure.
+month,Date of departure.
+day,Date of departure.
+dep_time,"Actual departure and arrival times (format HHMM or HMM), local tz."
+arr_time,"Actual departure and arrival times (format HHMM or HMM), local tz."
+sched_dep_time,"Scheduled departure and arrival times (format HHMM or HMM), local tz."
+sched_dep_time,"Scheduled departure and arrival times (format HHMM or HMM), local tz."
+dep_delay,"Departure and arrival delays, in minutes. Negative times represent early departures/arrivals."
+arr_delay,"Departure and arrival delays, in minutes. Negative times represent early departures/arrivals."
+carrier,Two letter carrier abbreviation.
+flight,Flight number.
+tailnum,Plane tail number.
+origin,Origin and destination.
+dest,Origin and destination.
+air_time,"Amount of time spent in the air, in minutes."
+distance,"Distance between airports, in miles."
+hour,Time of scheduled departure broken into hour and minutes.
+minute,Time of scheduled departure broken into hour and minutes.
+time_hour,Scheduled date and hour of the flight as a POSIXct date.

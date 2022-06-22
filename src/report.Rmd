@@ -84,6 +84,7 @@ fig %>%
   layout( title = 'No. of airports per State',
           geo = g)
 ```
+
 <p id="caption">Figure 1: An interactive map showing the number of airports per state. Puerto Rico (7 airports) and U.S. Virgin Islands (2 airports) are not shown.</p>
 
 <br>
