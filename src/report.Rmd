@@ -138,10 +138,10 @@ flights_df %>%
 
 <br>
 
-We can see from the first plot above hat the highest number of departure delays occur on month 6 (Jun), 7 (Jul), and 12 (Dec), which indicate there are more departure delays during summer and winter breaks.
+We can see from the first plot on the left that the highest number of departure delays occur on month 6 (Jun), 7 (Jul), and 12 (Dec), which indicate there are more departure delays during summer and winter breaks.
 
 <br>
-similar to the previous plot, in the second plot we see highest number of arrival delays occur on month 7 (Jul), and 12 (Dec) during the summer and winter breaks.
+similar to the previous plot, in the second plot on the right, we see highest number of arrival delays occur on month 7 (Jul), and 12 (Dec) during the summer and winter breaks.
 
 <br>
 
@@ -169,7 +169,7 @@ flights_df %>%
 
 <br>
 
-In the first plot we can see that as the number of flights increases, the number of departure delays also increase.
+In the first plot on the left, we can see that as the number of flights increases, the number of departure delays also increase.
 If we check for the months with the highest delays, 6 (Jun), 7 (Jul), and 12 (Dec). We see they also have the highest 
 number of flights compared to other months. 
 <br>
