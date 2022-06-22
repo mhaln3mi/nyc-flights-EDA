@@ -56,12 +56,13 @@ In 2013, data about 336,776 flights were collected to answer this question, the 
 #### Goal
 In this report, our goal is to alanyze the dataset to find relationships between delays and our variables.
 <br>
+
 #### Methods
 - Data munging
 - Exploratory data analysis(EDA)
 - Data visualization
 <br>
-### EDA
+
 #### The Dataset
 
 ```{r}
@@ -110,6 +111,9 @@ summary(flights_df)
 ```
 <br>
 
+
+### EDA
+<br>
 
 ```{r}
 airports_per_state <- read_csv(here("data/airports_per_state.csv"))
@@ -209,7 +213,7 @@ The map shows us that the most visited destination is Florida, followed by Calif
 
 ##### MAAN
 
-``` {r, figures-side, fig.show="hold", out.width="50%"}
+``` {r}
 flights %>%
   filter(dep_delay > 0) %>%
   count(month, dep_delay) %>% 
@@ -219,6 +223,7 @@ flights %>%
        y = "Number of Departure delays",
        title = "Number of Departure delays by month") +
   xlim(0,12.5)
+  
 flights %>%
   filter(arr_delay > 0) %>%
   count(month, arr_delay) %>% 
