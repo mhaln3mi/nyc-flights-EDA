@@ -99,27 +99,18 @@ colSums(is.na(flights_df))
 
 
 
-``` {r}
+``` {r, figures-side, fig.show="hold", out.width="50%"}
 # maan
 flights_df %>%
   filter(dep_delay > 0) %>%
-  count(month, dep_delay, flight) %>% 
+  count(month, dep_delay) %>% 
   ggplot(aes(month, n)) +
   geom_col() +
   labs(x = "Month",
        y = "Number of Departure delays",
        title = "Number of Departure delays by month") +
   xlim(0,12.5)
-```
 
-<br>
-
-We can see from the plot above hat the highest number of departure delays occur on month 6 (Jun), 7 (Jul), and 12 (Dec)
-which indicate there are more departure delays during summer and winter breaks.
-
-<br>
-
-```{r}
 flights_df %>%
   filter(arr_delay > 0) %>%
   count(month, arr_delay) %>% 
@@ -133,10 +124,14 @@ flights_df %>%
 
 <br>
 
-similar to the previous plot, here we see highest number of arrival delays occur on month 7 (Jul), and 12 (Dec)
-during the summer and winter breaks.
+We can see from the first plot above hat the highest number of departure delays occur on month 6 (Jun), 7 (Jul), and 12 (Dec), which indicate there are more departure delays during summer and winter breaks.
 
 <br>
+similar to the previous plot, in the second plot we see highest number of arrival delays occur on month 7 (Jul), and 12 (Dec) during the summer and winter breaks.
+
+<br>
+
+
 
 ```{r}
 flights_df %>%

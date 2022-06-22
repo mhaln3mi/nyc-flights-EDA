@@ -24,6 +24,7 @@ is.null(flights_df)
 #MAAN
 
 library(ggplot2)
+library(gridExtra)
 
 # dep_delay by day-time (hours)
 flights_df <- flights_df %>% 
@@ -33,11 +34,11 @@ flights_df <- flights_df %>%
 flights_df %>%
   filter(dep_delay > 0) %>%
   count(hour, dep_delay) %>% 
-  ggplot(aes(hour, n)) +
+  ggplot(aes(hour, dep_delay)) +
   geom_col() +
   labs(x = "Hour of day",
        y = "Number of Departure delay",
-       title = "Number of Departure delay by hour of day")
+       title = "Number of Departure delay by hour of day") 
 
 
 
