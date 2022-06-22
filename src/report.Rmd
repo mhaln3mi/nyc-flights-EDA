@@ -83,14 +83,12 @@ Although 3 airports per city may seem large, larger than many of the world’s c
 
 <br><br>
 
-####shaimaa
+#### Shaimaa
 
 first we need to clean our data 
 
-```{r, echo=FALSE, include=FALSE}
-flights -> flights_df
-glimpse(flights_df)
-summary(flights_df)
+```{r}
+flights_df = flights
 
 # Checking for duplicates.
 janitor::get_dupes(flights_df)
@@ -101,6 +99,17 @@ colSums(is.na(flights_df))
 
 ```
 <br>
+
+Now lets take a look at our data:
+
+```{r}
+glimpse(flights_df)
+
+summary(flights_df)
+
+```
+<br>
+
 
 ```{r}
 airports_per_state <- read_csv(here("data/airports_per_state.csv"))
@@ -201,7 +210,7 @@ The map shows us that the most visited destination is Florida, followed by Calif
 ##### MAAN
 
 ``` {r, figures-side, fig.show="hold", out.width="50%"}
-flights_df %>%
+flights %>%
   filter(dep_delay > 0) %>%
   count(month, dep_delay) %>% 
   ggplot(aes(month, n)) +
@@ -210,7 +219,7 @@ flights_df %>%
        y = "Number of Departure delays",
        title = "Number of Departure delays by month") +
   xlim(0,12.5)
-flights_df %>%
+flights %>%
   filter(arr_delay > 0) %>%
   count(month, arr_delay) %>% 
   ggplot(aes(month, n)) +
