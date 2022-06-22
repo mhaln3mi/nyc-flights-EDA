@@ -24,7 +24,7 @@ body {
 text-align: justify;
 max-width: 800px;
 margin: auto;
-font-size: 16px;
+font-size: 18px;
 }
 
 table{
@@ -205,6 +205,58 @@ fig %>%
 
 The map shows us that the most visited destination is Florida, followed by California by almost half of the number. The map also shows that there are 8 states with zero flights towards it namely: Mississippi, Kansas, Idaho, New Hampshire, New Jersey, Delaware, South and North Dakota.
 
+<br>
+Figure 4 will show us the delays per airport:
+<br>
+```{r}
+flights %>% 
+  select(origin, arr_delay, dep_delay) %>% 
+  pivot_longer(-c(origin)) -> plot4
+
+posn_d <- position_dodge(width = 0.3)
+
+ggplot(head(plot4, 200), aes(x=origin, y=value, color=name)) +
+  geom_point(position = posn_d) +
+    stat_summary(fun = mean, na.rm = TRUE, 
+               geom = "point", color = "black", size = 2) +
+  labs(x="Airport", y="Delay (minutes)", color = "Delay type") +
+  scale_color_brewer(palette = "Accent",
+                     labels = c("Arrival delay", "Departure delay"))
+```
+<p id="caption">Figure 4: Number of delays per NYC airport</p>
+The figure features positive and negative points–indicating departure/arrival was before time or ahead of scheduled time. Yet it is not enough to say that a one airport will have a certain delay time.
+
+To further investigate that, let us take a look at the attributes and how they affect each other.
+
+
+```{r}
+all_df <- subset(flights,
+                 select = c(dep_time, sched_dep_time, dep_delay,
+                            arr_time, sched_arr_time, arr_delay,
+                            air_time, distance) )
+
+all_matrix <- cor(all_df, use = "complete.obs")
+
+library(corrplot)
+corrplot(all_matrix,
+         type = "upper",
+         order = "hclust",
+         tl.col = "black",
+         tl.srt = 45,
+         diag = FALSE,
+         method = "number",
+         col = COL2('PRGn'))
+```
+<p id="caption">Figure 5: Correlation matrix of the dataset attributes</p>
+
+Here we see the correlation matrix between the main numeric attributes.
+
+- Surprisingly there is no correlation at all between `distance` and the delays (`dep_delay` and `arr_delay`) which was the opposite of what we expected.
+- There is no correlation between `air_time` (time airplane spent in air) and the delays.
+- There is a *strong* correlation between departure delay and arrival delay which is reasonable since one is caused by the other.
+- There is some obvious *strong* correlations like `distance` and `air_time` and the bottom between the attributes: departure time, scheduled departure time, arrival time, scheduled arrival time which is expected. 
+
+
 
 ### Conclusion
 ### Resources
@@ -276,29 +328,6 @@ The second plot is similar to the first where the number of flights increases, t
 
 <br>
 
-##### SAAD
-
-```{r}
-all_df <- subset(flights,
-                 select = c(dep_time, sched_dep_time, dep_delay,
-                            arr_time, sched_arr_time, arr_delay,
-                            air_time, distance) )
-
-all_matrix <- cor(all_df, use = "complete.obs")
-
-library(corrplot)
-corrplot(all_matrix, type = "upper", order = "hclust",
-         tl.col = "black", tl.srt = 45, diag = FALSE, method = "number")
-```
-
-<br>
-
-Here we see the correlation matrix between the main numeric attributes.
-
-- Surprisingly there is no correlation at all between distance and the delays which was the opposite of what we expected.
-- there is no correlation between air time and the delays.
-- there is a *strong* correlation between departure delay and arrival delay which is reasonable since one usually is caused by the other.
-- there is some obvious *strong* correlations like between the distance and the air time and the bottom part between the attributes departure time, scheduled departure time, arrival time, scheduled arrival time.
 
 ##### YOSUF
 
@@ -381,7 +410,9 @@ flights_pos_delay <- flights_df1 %>%
   filter(dep_delay > -1)
 
 ggplot(flights_pos_delay, aes(y = carrier, fill = dep_delay_cat)) +
-  geom_bar()
+  geom_bar() +
+  labs(x="Delay (minutes)", y="Carrier", fill = "Delay type") +
+  scale_color_brewer(palette = "Accent")
 ```
 
 From the horizontal stacked bar it's clear that carriers UA, EV, B6 and DL have the highest frequency of delays, also these carriers have the highest number of flights, which can tell us that carriers having a high number of flights tend to have a high frequency of delays.
