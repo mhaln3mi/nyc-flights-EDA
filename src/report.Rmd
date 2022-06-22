@@ -39,7 +39,8 @@ table{
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE,    # hide code blocks
-                      message = FALSE) # hide warning messages
+                      warning = FALSE, # hide warning messages
+                      message = FALSE) 
 library(here)
 library(tidyverse)
 library(knitr)
@@ -53,14 +54,18 @@ Airport delays are one of the most common problems people face upon travelling. 
 
 In 2013, data about 336,776 flights were collected to answer this question, the data collected were about flights departing from New York City across all of its airports: John F. Kennedy International Airport (JFK), Newark Liberty International Airport (EWR) and LaGuardia Airport (LGA) to destinations all over the United States and some of its territories (Puerto Rico, and the American Virgin Islands). The data was described by 19 attributes shown in Table 1 followed by a sample of the data in Table 2.
 
+<br>
+
 #### Goal
-In this report, our goal is to alanyze the dataset to find relationships between delays and our variables.
+The aim behind this analysis is to confirm whether there is a relationship between New York City’s flight delays and attributes of the dataset. We hypothesize that flight distance and destination are major contributors to the delays and that different destinations with different distances will have less delays.
+
 <br>
 
 #### Methods
-- Data munging
-- Exploratory data analysis(EDA)
-- Data visualization
+- Data Visualization
+- Exploratory Data Analysis (EDA)
+- Data Munging
+
 <br>
 
 #### The Dataset
@@ -81,26 +86,15 @@ reactable(sample_n(flights, 5))
 <p id="caption">Table 2: A sample of the dataset and how it is structured</p>
 <br><br>
 
-#### Shaimaa
-
-first we need to clean our data 
+Now lets take a look at our data:
 
 ```{r}
-flights_df = flights
-
-# Checking for duplicates.
-janitor::get_dupes(flights_df)
+flights_df <- flights
 
 # Checking for null values.
 flights_df <- flights_df %>% drop_na()
 colSums(is.na(flights_df))
 
-```
-<br>
-
-Now lets take a look at our data:
-
-```{r}
 glimpse(flights_df)
 
 summary(flights_df)
@@ -108,13 +102,10 @@ summary(flights_df)
 ```
 <br><br>
 
+### EDA
+
 Although 3 airports per city may seem large, larger than many of the world’s capitals, the city that never sleeps hosts only 3 out of 16 airports of the state of New York which itself is not the host of the largest number of airports per state as shown in Figure 1.
 
-<br><br>
-
-
-
-### EDA
 <br>
 
 ```{r}
@@ -217,7 +208,8 @@ flights %>%
 
 posn_d <- position_dodge(width = 0.3)
 
-ggplot(head(plot4, 200), aes(x=origin, y=value, color=name)) +
+# ggplot(head(plot4, 200), aes(x=origin, y=value, color=name)) +
+ggplot(plot4, aes(x=origin, y=value, color=name)) +
   geom_point(position = posn_d) +
     stat_summary(fun = mean, na.rm = TRUE, 
                geom = "point", color = "black", size = 2) +
@@ -258,15 +250,9 @@ Here we see the correlation matrix between the main numeric attributes.
 - There is a *strong* correlation between departure delay and arrival delay which is reasonable since one is caused by the other.
 - There is some obvious *strong* correlations like `distance` and `air_time` and the bottom between the attributes: departure time, scheduled departure time, arrival time, scheduled arrival time which is expected. 
 
+<br>
 
-
-### Conclusion
-### Resources
-### Source Code
-=======
-<br><br>
-
-##### MAAN
+Although the correlation matrix showed us the relationship between many variables, it did not mention a very important aspect of flights, time.
 
 ``` {r}
 flights %>%
@@ -278,7 +264,11 @@ flights %>%
        y = "Number of Departure delays",
        title = "Number of Departure delays by month") +
   xlim(0,12.5)
-  
+```
+<p id="caption">Figure 6: Departure delays per month</p>
+
+<br>
+```{r}
 flights %>%
   filter(arr_delay > 0) %>%
   count(month, arr_delay) %>% 
@@ -289,17 +279,14 @@ flights %>%
     title = "Number of Arrival delays by month") +
   xlim(0,12.5)
 ```
-
-<br>
+<p id="caption">Figure 7: Arrival delays per month</p>
 
 We can see from the first plot on the left that the highest number of departure delays occur on month 6 (Jun), 7 (Jul), and 12 (Dec), which indicate there are more departure delays during summer and winter breaks.
 
 <br>
-similar to the previous plot, in the second plot on the right, we see highest number of arrival delays occur on month 7 (Jul), and 12 (Dec) during the summer and winter breaks.
+Similar to the previous plot, in the second plot on the right, we see highest number of arrival delays occur on month 7 (Jul), and 12 (Dec) during the summer and winter breaks.
 
 <br>
-
-
 
 ```{r}
 flights %>%
@@ -310,7 +297,11 @@ flights %>%
        y = "Number of Flights",
        title = "Number of flights by month") +
   guides(fill = guide_legend("Departure Delay"))
+```
+<p id="caption">Figure 8: Number of flights and their departure delays month</p>
 
+<br>
+```{r}
 flights %>%
   count(month, arr_delay, flight) %>%
   ggplot(aes(as.factor(month), fill = (arr_delay > 0))) +
@@ -320,19 +311,17 @@ flights %>%
        title = "Number of flights by month") +
   guides(fill = guide_legend("Arrival Delay"))
 ```
+<p id="caption">Figure 9: Number of flights and their arrival delays month</p>
 
 <br>
-
 In the first plot on the left, we can see that as the number of flights increases, the number of departure delays also increase.
 If we check for the months with the highest delays, 6 (Jun), 7 (Jul), and 12 (Dec). We see they also have the highest 
 number of flights compared to other months. 
+
 <br>
 The second plot is similar to the first where the number of flights increases, the number of Arrival delays also increase. Except that for month 8 (Aug), where the number of flights were high but the arrival delays were relatively lower than months with less flights.
 
 <br>
-
-
-##### YOSUF
 
 ```{r, figures-side, fig.show="hold", out.width="50%"} 
 # library("gridExtra")  
@@ -382,10 +371,11 @@ ggplot(flights_df1, aes(arr_delay_cat)) +
 # grid.arrange(dep_plot, arr_plot, ncol = 2)
 
 ``` 
+<p id="caption">Figure 9: Percentage of flights' departure and arrival delays</p>
 
 We can see that almost 39% of the NYC flights in the year 2013 had a departure delay, only 5% departed on time and 55.9% departed before time. As for the arrival delays, we can see that it doesn't differ that much from the departure delays.
 
-<br><br>
+<br>
 
 ```{r} 
 
@@ -401,6 +391,7 @@ flights_df1 %>%
   arrange(-no_flights) %>% 
   kable()
 ```
+<p id="caption">Table 3: Carriers, their number of flights and the percentage of flights with delays</p>
 
 WN carriers tend to have the highest percentage of overall delays, and US carriers tend to have a low percentage of delays compared to its number of flights.
 
@@ -417,10 +408,11 @@ ggplot(flights_pos_delay, aes(y = carrier, fill = dep_delay_cat)) +
   labs(x="Delay (minutes)", y="Carrier", fill = "Delay type") +
   scale_color_brewer(palette = "Accent")
 ```
+<p id="caption">Figure 10: Carriers, their number of flights and the percentage of flights with delays</p>
 
 From the horizontal stacked bar it's clear that carriers UA, EV, B6 and DL have the highest frequency of delays, also these carriers have the highest number of flights, which can tell us that carriers having a high number of flights tend to have a high frequency of delays.
 
-<br><br>
+<br>
 ```{r}
 
 # Summarizing each carrier with highest_delay and avg_delay
@@ -432,12 +424,19 @@ flights_df1 %>%
   kable()
  
 ```
+<p id="caption">Figure 11: Carriers and their maximum and average delays</p>
 
 The carrier with the highest delay time is HA with 1301 min delay and the carrier with the highest avg delay is F9 with an average of 20.2 
 
-<br><br>
+<br>
 
 ### Conclusion
-### Resources
-### Source Code
 
+
+### Resources
+
+
+### Source Code
+This report is hosted on Github Pages and the repo can be accessed via [this link](https://github.com/mhaln3mi/nyc-flights-EDA).
+
+<br><br><br>
