@@ -200,5 +200,115 @@ Here we see the correlation matrix between the main numeric attributes.
 - there is some obvious *strong* correlations like between the distance and the air time and the bottom part between the attributes departure time, scheduled departure time, arrival time, scheduled arrival time.
 
 ##### YOSUF
+```{r, echo=FALSE, include=FALSE}
+flights -> flights_df
+glimpse(flights_df)
+summary(flights_df)
+
+# Checking for duplicates.
+janitor::get_dupes(flights_df)
+
+# Checking for null values.
+flights_df <- flights_df %>% drop_na()
+colSums(is.na(flights_df))
+
+```
+
+```{r, figures-side, fig.show="hold", out.width="50%"} 
+# library("gridExtra")  
+
+flights_df1 <- flights_df
+
+# Categorizing the dep_delay & arr_delay time into 5 categories 
+
+flights_df1$dep_delay_cat <- cut(flights_df1$dep_delay,
+                     breaks = c(-45,-1,0,15,60,1301),
+                     labels = c("Before Time",
+                                "On Time",
+                                "Low Delay (less than 15 min)",
+                                "Medium Delay (16-60 min)",
+                                "High Delay (more than 60 min)"))
+
+flights_df1$arr_delay_cat <- cut(flights_df1$arr_delay,
+                     breaks = c(-88,-1,0,15,60,1272),
+                     labels = c("Before Time",
+                                "On Time",
+                                "Low Delay (less than 15 min)",
+                                "Medium Delay (16-60 min)",
+                                "High Delay (more than 61 min)"))
+
+# Plotting dep_delay_cat and arr_delay_cat based on it's count in the year
+# 2013, so we can know how much each represent in our sample.
+
+ggplot(flights_df1, aes(dep_delay_cat)) +
+  geom_bar(fill = "cadetblue3") +
+  geom_text(aes(label= scales::percent(after_stat(as.double(prop))), group=1),
+            stat='count', vjust = -0.3,) +
+  scale_x_discrete(guide = guide_axis(n.dodge=2))+
+  labs(title="Percentage of NYC Flights Departure Delay (2013)",
+       x = "Departue Delay Time",
+       y = "Number of Departure Delays")
+
+
+ggplot(flights_df1, aes(arr_delay_cat)) +
+  geom_bar(fill = "cadetblue3") +
+  geom_text(aes(label= scales::percent(after_stat(as.double(prop))), group=1),
+            stat='count', vjust = -0.3, ) +
+  scale_x_discrete(guide = guide_axis(n.dodge=2)) +
+  labs(title="Percentage of NYC Flights Arrival Delay (2013)",
+       x = "Arrival Delay Time",
+       y = "Number of Arrival Delays")
+
+# grid.arrange(dep_plot, arr_plot, ncol = 2)
+
+``` 
+
+#### We can see that almost 39% of the NYC flights in the year 2013 had a departure delay, only 5% departed on time and 55.9% departed before time.
+#### as for the arrival delays, we can see that it doesn't differ that much from the departure delays.
+
+<br><br>
+
+```{r, echo=FALSE} 
+
+# Summarizing each carrier with no_flights and percentage of dep_delays.
+
+flights_df1 %>% 
+  group_by(carrier) %>%
+  summarise(no_flights = n(), 
+            low_delay = scales::percent(sum(dep_delay > 0 & dep_delay < 16)/no_flights),
+            medium_delay = scales::percent(sum(dep_delay > 16 & dep_delay < 61)/no_flights),
+            high_delay = scales::percent(sum(dep_delay > 60)/no_flights),
+            overall_delay = scales::percent(sum(dep_delay > 0)/no_flights)) %>%
+  arrange(-no_flights)
+```
+#### WN carriers tend to have the highest percentage of overall delays, and US carriers tend to have a low percentage of delays compared to its number of flights.
+
+<br><br>
+```{r, echo=FALSE}
+
+# Plotting each carrier based on dep_delay_cat
+
+flights_pos_delay <- flights_df1 %>%
+  filter(dep_delay > -1)
+
+ggplot(flights_pos_delay, aes(y = carrier, fill = dep_delay_cat)) +
+  geom_bar()
+```
+#### From the horizontal stacked bar it's clear that carriers UA, EV, B6 and DL have the highest frequency of delays, also these carriers have the highest number of flights, which can tell us that carriers having a high amount of flights tend to have a high frequency of delays.
+
+<br><br>
+```{r, echo=FALSE}
+
+# Summarizing each carrier with highest_delay and avg_delay
+
+flights_df1 %>%
+  group_by(carrier) %>%
+  summarise(highest_delay = max(dep_delay), avg_delay = mean(dep_delay)) %>%
+  arrange(-avg_delay)
+ 
+```
+#### The carrier with the highest delay time is HA with 1301 min delay and the carrier with the highest avg delay is F9 with an average of 20.2 
+
+##### SHAIMAA
 
 ##### SHAIMAA
