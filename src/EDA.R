@@ -197,4 +197,65 @@ glimpse(most_dep_delay)
 
 #YOSUF
 
+library("gridExtra")  
+
+flights_df1 <- flights_df
+
+flights_df1$dep_delay_cat <- cut(flights_df1$dep_delay,
+                     breaks = c(-45,-1,0,15,60,1301),
+                     labels = c("Before Time",
+                                "On Time",
+                                "Low Delay (less than 15 min)",
+                                "Medium Delay (16-60 min)",
+                                "High Delay (more than 60 min)"))
+
+flights_df1$arr_delay_cat <- cut(flights_df1$arr_delay,
+                     breaks = c(-88,-1,0,15,60,1272),
+                     labels = c("Before Time",
+                                "On Time",
+                                "Low Delay (less than 15 min)",
+                                "Medium Delay (16-60 min)",
+                                "High Delay (more than 61 min)"))
+
+dep_plot <- ggplot(flights_df1, aes(dep_delay_cat)) +
+  geom_bar() +
+  geom_text(aes(label= scales::percent(after_stat(as.double(prop))), group=1),
+            stat='count', vjust = -0.3,) +
+  scale_x_discrete(guide = guide_axis(n.dodge=2))+
+  labs(title="Percentage of NYC Flights Departure Delay (2013)",
+       x = "Departue Delay Time",
+       y = "Number of Departure Delays")
+
+
+arr_plot <- ggplot(flights_df1, aes(arr_delay_cat)) +
+  geom_bar() +
+  geom_text(aes(label= scales::percent(after_stat(as.double(prop))), group=1),
+            stat='count', vjust = -0.3, ) +
+  scale_x_discrete(guide = guide_axis(n.dodge=2)) +
+  labs(title="Percentage of NYC Flights Arrival Delay (2013)",
+       x = "Arrival Delay Time",
+       y = "Number of Arrival Delays")
+
+grid.arrange(dep_plot, arr_plot, ncol = 2)
+
+flights_df1 %>% 
+  group_by(carrier) %>%
+  summarise(no_flights = n(), 
+            low_delay = scales::percent(sum(dep_delay > 0 & dep_delay < 16)/no_flights),
+            medium_delay = scales::percent(sum(dep_delay > 16 & dep_delay < 61)/no_flights),
+            high_delay = scales::percent(sum(dep_delay > 60)/no_flights),
+            overall_delay = scales::percent(sum(dep_delay > 0)/no_flights)) %>%
+  arrange(-no_flights)
+
+flights_pos_delay <- flights_df1 %>%
+  filter(dep_delay > -1)
+
+ggplot(flights_pos_delay, aes(y = carrier, fill = dep_delay_cat)) +
+  geom_bar()
+
+flights_df1 %>%
+  group_by(carrier) %>%
+  summarise(highest_delay = max(dep_delay), avg_delay = mean(dep_delay)) %>%
+  arrange(-avg_delay)
+
 #SHAIMAA
