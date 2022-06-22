@@ -7,6 +7,7 @@ library(nycflights13)
 library(tidyverse)
 library(janitor)
 
+
 flights -> flights_df
 
 glimpse(flights_df)
@@ -21,6 +22,81 @@ is.null(flights_df)
 #TURKI
 
 #MAAN
+
+library(ggplot2)
+
+# dep_delay by day-time (hours)
+flights_df <- flights_df %>% 
+  drop_na()
+
+
+flights_df %>%
+  filter(dep_delay > 30) %>%
+  count(hour, dep_delay) %>% 
+  ggplot(aes(hour, n)) +
+  geom_col() +
+  labs(x = "Hour of day",
+       y = "Number of Departure delay",
+       title = "Number of Departure delay by hour of day")
+
+
+
+# arr_delay by day-time (hours)
+
+flights_df %>%
+  filter(arr_delay > 0) %>%
+  count(hour, arr_delay) %>% 
+  ggplot(aes(hour, n)) +
+  geom_col() +
+  labs(x = "Hour of day",
+       y = "Number of Arrival delay",
+       title = "Number of Arrival delay by hour")
+
+
+# dep_delay by season (months)
+
+flights_df %>%
+  filter(dep_delay > 0) %>%
+  count(month, dep_delay, flight) %>% 
+  ggplot(aes(month, n, fill = )) +
+  geom_col() +
+  labs(x = "Month",
+       y = "Number of Departure delay",
+       title = "Number of Departure delay by month") +
+  xlim(0,12.5)
+
+
+flights_df %>%
+  filter(arr_delay > 0) %>%
+  count(month, arr_delay) %>% 
+  ggplot(aes(month, n)) +
+  geom_col() +
+  labs(x = "Month",
+    y = "Number of Arrival delay",
+    title = "Number of Arrival delay by month") +
+  xlim(0,12.5)
+
+
+# facet
+
+flights_df %>%
+  count(month, dep_delay, flight) %>% 
+  ggplot(aes(as.factor(month), n, fill = (dep_delay > 0))) +
+  geom_bar(position = "stack", stat = "identity") +
+  labs(x = "Month",
+       y = "Number of Flights",
+       title = "Number of flights by month") +
+  guides(fill = guide_legend("Departure Delay"))
+
+
+flights_df %>%
+  count(month, arr_delay, flight) %>% 
+  ggplot(aes(as.factor(month), n, fill = (arr_delay > 0))) +
+  geom_bar(position = "stack", stat = "identity") +
+  labs(x = "Month",
+       y = "Number of Flights",
+       title = "Number of flights by month") +
+  guides(fill = guide_legend("Arrival Delay"))
 
 #SAAD
 
