@@ -263,7 +263,7 @@ colSums(is.na(flights_df))
 
 ```
 
-```{r} 
+```{r, figures-side, fig.show="hold", out.width="50%"} 
 # library("gridExtra")  
 
 flights_df1 <- flights_df
@@ -362,6 +362,3 @@ flights_df1 %>%
 
 The carrier with the highest delay time is HA with 1301 min delay and the carrier with the highest avg delay is F9 with an average of 20.2 
 
-##### SHAIMAA
-
-##### SHAIMAA
