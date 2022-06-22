@@ -31,7 +31,7 @@ flights_df <- flights_df %>%
 
 
 flights_df %>%
-  filter(dep_delay > 30) %>%
+  filter(dep_delay > 0) %>%
   count(hour, dep_delay) %>% 
   ggplot(aes(hour, n)) +
   geom_col() +
@@ -81,8 +81,8 @@ flights_df %>%
 
 flights_df %>%
   count(month, dep_delay, flight) %>% 
-  ggplot(aes(as.factor(month), n, fill = (dep_delay > 0))) +
-  geom_bar(position = "stack", stat = "identity") +
+  ggplot(aes(as.factor(month), fill = (dep_delay > 0))) +
+  geom_bar(position = "stack") +
   labs(x = "Month",
        y = "Number of Flights",
        title = "Number of flights by month") +
@@ -91,8 +91,19 @@ flights_df %>%
 
 flights_df %>%
   count(month, arr_delay, flight) %>% 
-  ggplot(aes(as.factor(month), n, fill = (arr_delay > 0))) +
-  geom_bar(position = "stack", stat = "identity") +
+  ggplot(aes(as.factor(month), fill = (arr_delay > 0))) +
+  geom_bar(position = "stack") +
+  labs(x = "Month",
+       y = "Number of Flights",
+       title = "Number of flights by month") +
+  guides(fill = guide_legend("Arrival Delay"))
+
+
+
+flights_df %>%
+  count(month, dep_delay, flight) %>% 
+  ggplot(aes(as.factor(month), fill = (arr_delay > 0))) +
+  geom_bar(position = "stack") +
   labs(x = "Month",
        y = "Number of Flights",
        title = "Number of flights by month") +
