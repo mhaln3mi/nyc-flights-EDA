@@ -84,6 +84,7 @@ fig %>%
   layout( title = 'No. of airports per State',
           geo = g)
 ```
+
 <p id="caption">Figure 1: An interactive map showing the number of airports per state. Puerto Rico (7 airports) and U.S. Virgin Islands (2 airports) are not shown.</p>
 
 <br>
@@ -111,6 +112,70 @@ flights %>%
 
 
 ##### MAAN
+
+``` {r, figures-side, fig.show="hold", out.width="50%"}
+
+flights_df %>%
+  filter(dep_delay > 0) %>%
+  count(month, dep_delay) %>% 
+  ggplot(aes(month, n)) +
+  geom_col() +
+  labs(x = "Month",
+       y = "Number of Departure delays",
+       title = "Number of Departure delays by month") +
+  xlim(0,12.5)
+
+flights_df %>%
+  filter(arr_delay > 0) %>%
+  count(month, arr_delay) %>% 
+  ggplot(aes(month, n)) +
+  geom_col() +
+  labs(x = "Month",
+    y = "Number of Arrival delays",
+    title = "Number of Arrival delays by month") +
+  xlim(0,12.5)
+```
+
+<br>
+
+We can see from the first plot above hat the highest number of departure delays occur on month 6 (Jun), 7 (Jul), and 12 (Dec), which indicate there are more departure delays during summer and winter breaks.
+
+<br>
+similar to the previous plot, in the second plot we see highest number of arrival delays occur on month 7 (Jul), and 12 (Dec) during the summer and winter breaks.
+
+<br>
+
+
+
+```{r figures-side, fig.show="hold", out.width="50%"}
+flights_df %>%
+  count(month, dep_delay, flight) %>% 
+  ggplot(aes(as.factor(month), fill = (dep_delay > 0))) +
+  geom_bar(position = "stack") +
+  labs(x = "Month",
+       y = "Number of Flights",
+       title = "Number of flights by month") +
+  guides(fill = guide_legend("Departure Delay"))
+
+flights_df %>%
+  count(month, arr_delay, flight) %>% 
+  ggplot(aes(as.factor(month), fill = (arr_delay > 0))) +
+  geom_bar(position = "stack") +
+  labs(x = "Month",
+       y = "Number of Flights",
+       title = "Number of flights by month") +
+  guides(fill = guide_legend("Arrival Delay"))
+```
+
+<br>
+
+In the first plot we can see that as the number of flights increases, the number of departure delays also increase.
+If we check for the months with the highest delays, 6 (Jun), 7 (Jul), and 12 (Dec). We see they also have the highest 
+number of flights compared to other months. 
+<br>
+The second plot is similar to the first where the number of flights increases, the number of Arrival delays also increase. Except that for month 8 (Aug), where the number of flights were high but the arrival delays were relatively lower than months with less flights.
+
+<br>
 
 ##### SAAD
 
