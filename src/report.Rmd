@@ -1,20 +1,65 @@
 ---
-title: "R Notebook"
-output: html_notebook
-editor_options: 
+title: "NYC Flights Delays"
+author: "Turki Alsaedi, Saad AlOtaibi, Yousef Alotaibi, Maan Al Neami, Shaimaa Alghamdi<br><br> Table of Contents"
+output:
+  html_document:
+    df_print: paged
+    toc: true
+editor_options:
   chunk_output_type: inline
 ---
-
-This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook. When you execute code within the notebook, the results appear beneath the code. 
-
-Try executing this chunk by clicking the *Run* button within the chunk or by placing your cursor inside it and pressing *Ctrl+Shift+Enter*. 
-
-```{r}
-plot(cars)
+```{=html}
+<style>
+#caption{
+    color: #777777;
+}
+body {
+text-align: justify;
+max-width: 800px;
+margin: auto;
+font-size: 16px;
+}
+</style>
 ```
 
-Add a new chunk by clicking the *Insert Chunk* button on the toolbar or by pressing *Ctrl+Alt+I*.
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+library(here)        # relative paths in rmd
+library(tidyverse)
+library(knitr)
+library(nycflights13)
+library(ggplot2)
+```
+
+### Introduction
+Airport delays are one of the most common problems people face upon travelling. These delays are usually associated with certain carriers or destinations. Thus the question is, are they really the cause of these delays or is it due to other reasons?
+
+In 2013, data about 336,776 flights were collected to answer this question, the data collected were about flights departing from New York City across all of its airports: John F. Kennedy International Airport (JFK), Newark Liberty International Airport (EWR) and LaGuardia Airport (LGA) to destinations all over the United States and some of its territories (Puerto Rico, and the American Virgin Islands). The data was described by 19 attributes shown in Table 1.
+
+#### Goal
+
+#### Methods
+
+### EDA
+#### The Dataset
+
+```{r}
+flights_data <- read.csv(here("data/flights_data_v2.csv"))
+
+kable(flights_data)
+```
+<p id="caption">Table 1: A list of all attributes and its descriptions that are present in the dataset</p>
+
+<br>
+Although 3 airports per city may seem large, larger than many of the world’s capitals, the city that never sleeps hosts only 3 out of 16 airports of the state of New York which itself is not the host of the largest number of airports per state as shown in Figure 1.
+
+```{r}
+
+```
+
 
 When you save the notebook, an HTML file containing the code and output will be saved alongside it (click the *Preview* button or press *Ctrl+Shift+K* to preview the HTML file).
 
-The preview shows you a rendered HTML copy of the contents of the editor. Consequently, unlike *Knit*, *Preview* does not run any R code chunks. Instead, the output of the chunk when it was last run in the editor is displayed.
+### Conclusion
+### Resources
+### Source Code
