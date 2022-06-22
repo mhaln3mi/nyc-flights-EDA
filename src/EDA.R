@@ -35,29 +35,49 @@ dep_df <- subset(flights_df,
 arr_df <- subset(flights_df, 
                 select = c(arr_time, sched_arr_time, arr_delay, air_time, distance) )
 
-all_df <- subset(flights_df, 
-                 select = c(dep_time, sched_dep_time, dep_delay,
-                            arr_time, sched_arr_time, arr_delay,
+delays_df <- subset(flights_df, 
+                 select = c(dep_delay, arr_delay, air_time, distance) )
+
+time_df <- subset(flights_df, 
+                 select = c(dep_time, sched_dep_time,
+                            arr_time, sched_arr_time,
                             air_time, distance) )
 
-dep_matrix <- cor(dep_df, use = "complete.obs")
-dep_matrix
+delays_matrix <- cor(delays_df, use = "complete.obs")
+delays_matrix
 
-arr_matrix <- cor(arr_df, use = "complete.obs")
-arr_matrix
-
-all_matrix <- cor(all_df, use = "complete.obs")
-all_matrix
+time_matrix <- cor(time_df, use = "complete.obs")
+time_matrix
 
 library(corrplot)
-corrplot(dep_matrix, type = "upper", order = "hclust", 
-         tl.col = "black", tl.srt = 45)
 
-corrplot(all_matrix, type = "upper", order = "hclust", 
+corrplot(delays_matrix, type = "upper", order = "hclust", 
          tl.col = "black", tl.srt = 45, diag = FALSE, method = "number")
 
-ggplot(flights_df, aes(arr_delay, dep_delay)) +
+corrplot(time_matrix, type = "upper", order = "hclust", 
+         tl.col = "black", tl.srt = 45, diag = FALSE, method = "number")
+
+
+ggplot(flights_df, aes(distance, arr_delay)) +
   geom_jitter()
+
+ggplot(flights_df, aes(distance, dep_delay)) +
+  geom_jitter()
+
+ggplot(flights_df, aes(air_time, arr_delay)) +
+  geom_jitter()
+
+ggplot(flights_df, aes(air_time, dep_delay)) +
+  geom_jitter()
+
+flights_df %>%
+  slice_max(arr_delay) -> most_arr_delay
+
+flights_df %>%
+  slice_max(dep_delay) -> most_dep_delay
+
+glimpse(most_arr_delay)
+most_dep_delay
 
 #YOSUF
 

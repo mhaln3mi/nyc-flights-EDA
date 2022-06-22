@@ -93,9 +93,9 @@ library(corrplot)
 corrplot(all_matrix, type = "upper", order = "hclust", 
          tl.col = "black", tl.srt = 45, diag = FALSE, method = "number")
 
-# Here we see the correlation between the 8 attributes and suprisengly there is no correlation at all between distance and all delays which was the opposite of what we expected 
-
 ```
+
+Here we see the correlation between the 8 attributes and suprisengly there is no correlation at all between distance and all delays which was the opposite of what we expected 
 
 
 ``` {r}
