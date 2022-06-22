@@ -16,7 +16,8 @@ summary(flights_df)
 get_dupes(flights_df)
 
 # Checking for null values.
-is.null(flights_df)
+flights_df <- flights_df %>% drop_na()
+colSums(is.na(flights_df))
 
 #TURKI
 
