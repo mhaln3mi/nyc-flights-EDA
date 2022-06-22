@@ -4,16 +4,6 @@ install.packages("nycflights13")
 # Initialize the libraries
 library(nycflights13)
 library(tidyverse)
-
-
-flights -> flights_df
-
-# Install the package
-install.packages("nycflights13")
-
-# Initialize the libraries
-library(nycflights13)
-library(tidyverse)
 library(janitor)
 
 flights -> flights_df
