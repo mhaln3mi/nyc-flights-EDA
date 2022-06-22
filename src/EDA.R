@@ -29,11 +29,16 @@ is.null(flights_df)
 # to be high or low? (mention scale/threshold used) 
 
 # We'll use the correlation matrix
-dep_df = subset(flights_df, 
+dep_df <- subset(flights_df, 
                 select = c(dep_time, sched_dep_time, dep_delay, air_time, distance) )
 
-arr_df = subset(flights_df, 
+arr_df <- subset(flights_df, 
                 select = c(arr_time, sched_arr_time, arr_delay, air_time, distance) )
+
+all_df <- subset(flights_df, 
+                 select = c(dep_time, sched_dep_time, dep_delay,
+                            arr_time, sched_arr_time, arr_delay,
+                            air_time, distance) )
 
 dep_matrix <- cor(dep_df, use = "complete.obs")
 dep_matrix
@@ -41,10 +46,18 @@ dep_matrix
 arr_matrix <- cor(arr_df, use = "complete.obs")
 arr_matrix
 
+all_matrix <- cor(all_df, use = "complete.obs")
+all_matrix
+
 library(corrplot)
 corrplot(dep_matrix, type = "upper", order = "hclust", 
          tl.col = "black", tl.srt = 45)
 
+corrplot(all_matrix, type = "upper", order = "hclust", 
+         tl.col = "black", tl.srt = 45, diag = FALSE, method = "number")
+
+ggplot(flights_df, aes(arr_delay, dep_delay)) +
+  geom_jitter()
 
 #YOSUF
 
