@@ -1,20 +1,118 @@
 ---
-title: "R Notebook"
-output: html_notebook
-editor_options: 
-  chunk_output_type: inline
+title: "NYC Flights EDA"
+date: '2022-06-22'
+knit: (function(input, ...) {
+    rmarkdown::render(
+      input,
+      output_dir = "../"
+    )
+  })
 ---
 
-This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook. When you execute code within the notebook, the results appear beneath the code. 
-
-Try executing this chunk by clicking the *Run* button within the chunk or by placing your cursor inside it and pressing *Ctrl+Shift+Enter*. 
-
-```{r}
-plot(cars)
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
+# Libraries
+library(nycflights13)
+library(tidyverse)
+library(janitor)
+# reading the dataset
+flights -> flights_df
 ```
 
-Add a new chunk by clicking the *Insert Chunk* button on the toolbar or by pressing *Ctrl+Alt+I*.
+## Atrributes description 
++--------------------+---------------+----------------------------------------------+
+|Variable            |Type           |    Description                               |
++====================+===============+==============================================+
+| fixed_acidity      |    Double     | most acids involved with wine or fixed or    |
+|                    |               | nonvolatile (do not evaporate readily)       |
++--------------------+---------------+----------------------------------------------+
+|Voltaile_acidity    |    Double     | the amount of acetic acid in wine, which at too high of levels can lead to an unpleasant, vinegar taste|
+|                    |               |                                              |
++--------------------+---------------+----------------------------------------------+
+| citric_acid        |    Double     | found in small quantities, citric acid can add 'freshness' and flavor to wines|
+|                    |               |                                              |
++--------------------+---------------+----------------------------------------------+
+|residual_sugar      |    Double     | the amount of sugar remaining after fermentation stops|
+|                    |               |                                              |
++--------------------+---------------+----------------------------------------------+
+|chlorides           |    Double     | the amount of salt in the wine               |
++--------------------+---------------+----------------------------------------------+
+|free_sulfur_dioxide |    Double     | the free form of SO2 exists in equilibrium between molecular SO2| 
+|                    |               | (as a dissolved gas) and bisulfite ion; it prevents microbial growth and the oxidation of wine|
+|                    |               |                                              |
++--------------------+---------------+----------------------------------------------+
+|total_sulfur_dioxide|    Double     | amount of free and bound forms of S02; in low concentrations, SO2 is mostly undetectable in wine, but at free SO2 concentrations over 50 ppm,| 
+|                    |               | SO2 becomes evident in the nose and taste of wine|
+|                    |               |                                              |
++--------------------+---------------+----------------------------------------------+
+|density             |    Double     | the density of water is close to that of water depending on the percent alcohol and sugar content|
+|                    |               |                                              |
++--------------------+---------------+----------------------------------------------+
+|pH                  |    Double     | describes how acidic or basic a wine is on a scale from 0 (very acidic) to 14 (very basic); most wines are between 3-4 on the pH scale|
+|                    |               |                                              |
++--------------------+---------------+----------------------------------------------+
+|sulphates           |    Double     | a wine additive which can contribute to sulfur dioxide gas (S02) levels, wich acts as an antimicrobial and antioxidant|
+|                    |               |                                              |
++--------------------+---------------+----------------------------------------------+
+|alcohol             |    Double     | the percent alcohol content of the wine      |
++--------------------+---------------+----------------------------------------------+
+|quality             |    Double     | Score between (3-8)                          | 
++--------------------+---------------+----------------------------------------------+
 
-When you save the notebook, an HTML file containing the code and output will be saved alongside it (click the *Preview* button or press *Ctrl+Shift+K* to preview the HTML file).
 
-The preview shows you a rendered HTML copy of the contents of the editor. Consequently, unlike *Knit*, *Preview* does not run any R code chunks. Instead, the output of the chunk when it was last run in the editor is displayed.
+```{r, echo=FALSE, include=FALSE}
+glimpse(flights_df)
+summary(flights_df)
+# Checking for duplicates.
+get_dupes(flights_df)
+# Checking for null values.
+flights_df <- flights_df %>% drop_na()
+colSums(is.na(flights_df))
+```
+
+
+
+```{r} 
+# yousef
+ 
+```
+
+
+
+```{r}
+# saad 
+
+all_df <- subset(flights_df, 
+                 select = c(dep_time, sched_dep_time, dep_delay,
+                            arr_time, sched_arr_time, arr_delay,
+                            air_time, distance) )
+
+all_matrix <- cor(all_df, use = "complete.obs")
+
+library(corrplot)
+corrplot(all_matrix, type = "upper", order = "hclust", 
+         tl.col = "black", tl.srt = 45, diag = FALSE, method = "number")
+
+# Here we see the correlation between the 8 attributes and suprisengly there is no correlation at all between distance and all delays which was the opposite of what we expected 
+
+```
+
+
+``` {r}
+# turki
+```
+
+
+
+``` {r}
+# maan
+```
+
+
+## Conclusion 
+
+
+                  
+## Citation
+
+#### [name](url)
