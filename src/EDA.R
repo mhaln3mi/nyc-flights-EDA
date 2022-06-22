@@ -69,7 +69,11 @@ grid.arrange(dep_plot, arr_plot, ncol = 2)
 
 flights_df1 %>% 
   group_by(carrier) %>%
-  summarise(no_flights = n()) %>%
+  summarise(no_flights = n(), 
+            low_delay = scales::percent(sum(dep_delay > 0 & dep_delay < 16)/no_flights),
+            medium_delay = scales::percent(sum(dep_delay > 16 & dep_delay < 61)/no_flights),
+            high_delay = scales::percent(sum(dep_delay > 60)/no_flights),
+            overall_delay = scales::percent(sum(dep_delay > 0)/no_flights)) %>%
   arrange(-no_flights)
 
 flights_pos_delay <- flights_df1 %>%
@@ -84,8 +88,12 @@ ggplot(flights_pos_delay, aes(y = carrier, fill = dep_delay_cat)) +
 
 flights_df1 %>%
   group_by(carrier) %>%
-  summarise(highest_delay = max(dep_delay), avg_delay = mean(dep_delay),
-            delays_higher_than_120min = sum(dep_delay > 120)) %>%
+  summarise(highest_delay = max(dep_delay), avg_delay = mean(dep_delay)) %>%
   arrange(-avg_delay)
 
 #SHAIMAA
+
+flights_df %>%
+  filter(hour == 15) %>% 
+  filter(dep_delay > 0) %>%
+  nrow()

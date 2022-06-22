@@ -77,11 +77,11 @@ colSums(is.na(flights_df))
 
 ```
 
-
+</br>
 
 ```{r, figures-side, fig.show="hold", out.width="50%"} 
 # yousef
-library("gridExtra")  
+# library("gridExtra")  
 
 flights_df1 <- flights_df
 
@@ -102,7 +102,7 @@ flights_df1$arr_delay_cat <- cut(flights_df1$arr_delay,
                                 "High Delay (more than 61 min)"))
 
 ggplot(flights_df1, aes(dep_delay_cat)) +
-  geom_bar() +
+  geom_bar(fill = "cadetblue3") +
   geom_text(aes(label= scales::percent(after_stat(as.double(prop))), group=1),
             stat='count', vjust = -0.3,) +
   scale_x_discrete(guide = guide_axis(n.dodge=2))+
@@ -112,7 +112,7 @@ ggplot(flights_df1, aes(dep_delay_cat)) +
 
 
 ggplot(flights_df1, aes(arr_delay_cat)) +
-  geom_bar() +
+  geom_bar(fill = "cadetblue3") +
   geom_text(aes(label= scales::percent(after_stat(as.double(prop))), group=1),
             stat='count', vjust = -0.3, ) +
   scale_x_discrete(guide = guide_axis(n.dodge=2)) +
@@ -123,11 +123,16 @@ ggplot(flights_df1, aes(arr_delay_cat)) +
 ## grid.arrange(dep_plot, arr_plot, ncol = 2)
 
 ``` 
+</br>
 
 ```{r, echo=FALSE} 
 flights_df1 %>% 
   group_by(carrier) %>%
-  summarise(no_flights = n()) %>%
+  summarise(no_flights = n(), 
+            low_delay = scales::percent(sum(dep_delay > 0 & dep_delay < 16)/no_flights),
+            medium_delay = scales::percent(sum(dep_delay > 16 & dep_delay < 61)/no_flights),
+            high_delay = scales::percent(sum(dep_delay > 60)/no_flights),
+            overall_delay = scales::percent(sum(dep_delay > 0)/no_flights)) %>%
   arrange(-no_flights)
 
 flights_pos_delay <- flights_df1 %>%
@@ -142,11 +147,11 @@ ggplot(flights_pos_delay, aes(y = carrier, fill = dep_delay_cat)) +
 
 flights_df1 %>%
   group_by(carrier) %>%
-  summarise(highest_delay = max(dep_delay), avg_delay = mean(dep_delay),
-            delays_higher_than_120min = sum(dep_delay > 120)) %>%
+  summarise(highest_delay = max(dep_delay), avg_delay = mean(dep_delay)) %>%
   arrange(-avg_delay)
  
 ```
+</br>
 
 
 
