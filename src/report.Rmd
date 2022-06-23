@@ -99,7 +99,7 @@ Now lets take a look at our data:
 flights_df <- flights
 
 # Checking for null values.
-flights_df <- flights_df %>% drop_na()
+flights <- flights_df %>% drop_na()
 colSums(is.na(flights_df))
 
 glimpse(flights_df)
