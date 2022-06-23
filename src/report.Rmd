@@ -47,9 +47,16 @@ library(knitr)
 library(nycflights13)
 library(plotly)
 library(ggplot2)
+library(gridExtra)
 ```
 
 ### Introduction
+<br>
+
+<img src = "../../delay-1.jpg">
+
+<br>
+
 Airport delays are one of the most common problems people face upon travelling. These delays are usually associated with certain carriers or destinations. Thus the question is, are they really the cause of these delays or is it due to other reasons?
 
 In 2013, data about 336,776 flights were collected to answer this question, the data collected were about flights departing from New York City across all of its airports: John F. Kennedy International Airport (JFK), Newark Liberty International Airport (EWR) and LaGuardia Airport (LGA) to destinations all over the United States and some of its territories (Puerto Rico, and the American Virgin Islands). The data was described by 19 attributes shown in Table 1 followed by a sample of the data in Table 2.
@@ -265,16 +272,8 @@ flights_df %>%
   geom_col() +
   labs(x = "Hour of day",
        y = "Number of Departure delays",
-       title = "Number of Departure delay by hour of days") 
-```
-<p id="caption">Figure 6: Departure delays per hour</p>
+       title = "Number of Departure delay by hour of days") -> dep_plot1
 
-<br>
-
-The plot above indicate that the lowest number of departure delays occur on the early hours of day at 5 am, and late at night at 10-11pm. And the worst time is between 4-7 pm
-
-<br>
-```{r}
 flights_df %>%
   filter(arr_delay > 0) %>%
   count(hour, arr_delay) %>% 
@@ -282,13 +281,19 @@ flights_df %>%
   geom_col() +
   labs(x = "Hour of day",
        y = "Number of Arrival delays",
-       title = "Number of Arrival delays by hour")
+       title = "Number of Arrival delays by hour") -> arr_plot1
+
+grid.arrange(dep_plot1, arr_plot1, ncol = 2)
 ```
-<p id="caption">Figure 7: Arrival delays per hour</p>
+<p id="caption">Figure 6: Departure and ARRIVAL delays per hour</p>
 
 <br>
 
-The plot above indicate similar result to the previous one, with the lowest number of arrival delays occur on the early hours of day at 5 am, and late at night at 10-11pm. And the worst time is between 4-7 pm
+The first plot on the left indicate that the lowest number of departure delays occur on the early hours of day at 5 am, and late at night at 10-11pm. And the worst time is between 4-7 pm
+
+<br>
+
+The second plot on the right indicate similar result to the previous one, with the lowest number of arrival delays occur on the early hours of day at 5 am, and late at night at 10-11pm. And the worst time is between 4-7 pm
 
 <br>
 
@@ -302,12 +307,8 @@ flights %>%
   labs(x = "Month",
        y = "Number of Departure delays",
        title = "Number of Departure delays by month") +
-  xlim(0,12.5)
-```
-<p id="caption">Figure 8: Departure delays per month</p>
+  xlim(0,12.5) -> dep_plot2
 
-<br>
-```{r}
 flights %>%
   filter(arr_delay > 0) %>%
   count(month, arr_delay) %>% 
@@ -316,28 +317,21 @@ flights %>%
   labs(x = "Month",
     y = "Number of Arrival delays",
     title = "Number of Arrival delays by month") +
-  xlim(0,12.5)
+  xlim(0,12.5) -> arr_plot2
+
+grid.arrange(dep_plot2, arr_plot2, ncol = 2)
+
 ```
-<p id="caption">Figure 9: Arrival delays per month</p>
+<p id="caption">Figure 7: Departure and Arrival delays per month</p>
+
+<br>
 
 We can see from the first plot that the highest number of departure delays occur on month 6 (Jun), 7 (Jul), and 12 (Dec), which indicate there are more departure delays during summer and winter breaks.
 
 <br>
-Similar to the previous plot, in the second plot we see highest number of arrival delays occur on month 7 (Jul), and 12 (Dec) during the summer and winter breaks.
+Similar to the other plot, in the second plot we see highest number of arrival delays occur on month 7 (Jul), and 12 (Dec) during the summer and winter breaks.
 
 <br>
-
-```{r}
-flights %>%
-  count(month, dep_delay, flight) %>%
-  ggplot(aes(as.factor(month), fill = (dep_delay > 0))) +
-  geom_bar(position = "stack") +
-  labs(x = "Month",
-       y = "Number of Flights",
-       title = "Number of flights by month") +
-  guides(fill = guide_legend("Departure Delay"))
-```
-<p id="caption">Figure 10: Number of flights and their departure delays month</p>
 
 <br>
 ```{r}
@@ -350,7 +344,7 @@ flights %>%
        title = "Number of flights by month") +
   guides(fill = guide_legend("Arrival Delay"))
 ```
-<p id="caption">Figure 11: Number of flights and their arrival delays month</p>
+<p id="caption">Figure 8: Number of flights and their arrival delays month</p>
 
 <br>
 In the first plot on the left, we can see that as the number of flights increases, the number of departure delays also increase.
@@ -410,7 +404,7 @@ ggplot(flights_df1, aes(arr_delay_cat)) +
 # grid.arrange(dep_plot, arr_plot, ncol = 2)
 
 ``` 
-<p id="caption">Figure 12: Percentage of flights' departure and arrival delays</p>
+<p id="caption">Figure 9: Percentage of flights' departure and arrival delays</p>
 
 We can see that almost 39% of the NYC flights in the year 2013 had a departure delay, only 5% departed on time and 55.9% departed before time. As for the arrival delays, we can see that it doesn't differ that much from the departure delays.
 
@@ -444,10 +438,10 @@ flights_pos_delay <- flights_df1 %>%
 
 ggplot(flights_pos_delay, aes(y = carrier, fill = dep_delay_cat)) +
   geom_bar() +
-  labs(x="Delay (minutes)", y="Carrier", fill = "Delay type") +
+  labs(x=" Number of flights", y="Carrier", fill = "Delay type") +
   scale_color_brewer(palette = "Accent")
 ```
-<p id="caption">Figure 13: Carriers, their number of flights and the percentage of flights with delays</p>
+<p id="caption">Figure 10: Carriers, their number of flights and the percentage of flights with delays</p>
 
 From the horizontal stacked bar it's clear that carriers UA, EV, B6 and DL have the highest frequency of delays, also these carriers have the highest number of flights, which can tell us that carriers having a high number of flights tend to have a high frequency of delays.
 
@@ -463,7 +457,7 @@ flights_df1 %>%
   kable()
  
 ```
-<p id="caption">Figure 14: Carriers and their maximum and average delays</p>
+<p id="caption">Figure 11: Carriers and their maximum and average delays</p>
 
 The carrier with the highest delay time is HA with 1301 min delay and the carrier with the highest avg delay is F9 with an average of 20.2 
 
