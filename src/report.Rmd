@@ -268,7 +268,7 @@ Although the correlation matrix showed us the relationship between many variable
 flights_df %>%
   filter(dep_delay > 0) %>%
   count(hour, dep_delay) %>% 
-  ggplot(aes(hour, dep_delay)) +
+  ggplot(aes(hour, n)) +
   geom_col() +
   labs(x = "Hour of day",
        y = "Number of Departure delays",
