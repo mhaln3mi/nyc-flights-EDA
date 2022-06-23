@@ -336,20 +336,34 @@ Similar to the other plot, in the second plot we see highest number of arrival d
 <br>
 ```{r}
 flights %>%
+  count(month, dep_delay, flight) %>%
+  ggplot(aes(as.factor(month), fill = (dep_delay > 0))) +
+  geom_bar(position = "stack") +
+  labs(x = "Month",
+       y = "Number of Flights",
+       title = "Number of flights by month") +
+  guides(fill = guide_legend("Departure Delay")) 
+
+
+```
+<p id="caption">Figure 8: Number of flights and their departure delays month</p>
+
+<br>
+In the first plot on the left, we can see that as the number of flights increases, the number of departure delays also increase.
+If we check for the months with the highest delays, 6 (Jun), 7 (Jul), and 12 (Dec). We see they also have the highest 
+number of flights compared to other months. 
+
+```{r}
+flights %>%
   count(month, arr_delay, flight) %>%
   ggplot(aes(as.factor(month), fill = (arr_delay > 0))) +
   geom_bar(position = "stack") +
   labs(x = "Month",
        y = "Number of Flights",
        title = "Number of flights by month") +
-  guides(fill = guide_legend("Arrival Delay"))
+  guides(fill = guide_legend("Arrival Delay")) 
 ```
-<p id="caption">Figure 8: Number of flights and their arrival delays month</p>
-
-<br>
-In the first plot on the left, we can see that as the number of flights increases, the number of departure delays also increase.
-If we check for the months with the highest delays, 6 (Jun), 7 (Jul), and 12 (Dec). We see they also have the highest 
-number of flights compared to other months. 
+<p id="caption">Figure 9: Number of flights and their arrival delays month</p>
 
 <br>
 The second plot is similar to the first where the number of flights increases, the number of Arrival delays also increase. Except that for month 8 (Aug), where the number of flights were high but the arrival delays were relatively lower than months with less flights.
@@ -404,7 +418,7 @@ ggplot(flights_df1, aes(arr_delay_cat)) +
 # grid.arrange(dep_plot, arr_plot, ncol = 2)
 
 ``` 
-<p id="caption">Figure 9: Percentage of flights' departure and arrival delays</p>
+<p id="caption">Figure 10: Percentage of flights' departure and arrival delays</p>
 
 We can see that almost 39% of the NYC flights in the year 2013 had a departure delay, only 5% departed on time and 55.9% departed before time. As for the arrival delays, we can see that it doesn't differ that much from the departure delays.
 
@@ -441,7 +455,7 @@ ggplot(flights_pos_delay, aes(y = carrier, fill = dep_delay_cat)) +
   labs(x=" Number of flights", y="Carrier", fill = "Delay type") +
   scale_color_brewer(palette = "Accent")
 ```
-<p id="caption">Figure 10: Carriers, their number of flights and the percentage of flights with delays</p>
+<p id="caption">Figure 11: Carriers, their number of flights and the percentage of flights with delays</p>
 
 From the horizontal stacked bar it's clear that carriers UA, EV, B6 and DL have the highest frequency of delays, also these carriers have the highest number of flights, which can tell us that carriers having a high number of flights tend to have a high frequency of delays.
 
@@ -457,7 +471,7 @@ flights_df1 %>%
   kable()
  
 ```
-<p id="caption">Figure 11: Carriers and their maximum and average delays</p>
+<p id="caption">Figure 12: Carriers and their maximum and average delays</p>
 
 The carrier with the highest delay time is HA with 1301 min delay and the carrier with the highest avg delay is F9 with an average of 20.2 
 
